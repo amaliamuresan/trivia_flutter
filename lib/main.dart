@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:trivia_app/src/features/authentication/views/login_screen.dart';
+import 'package:trivia_app/src/routes/routes.dart';
 import 'package:trivia_app/src/style/theme.dart';
 
 void main() {
@@ -12,10 +12,10 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
+    return MaterialApp.router(
+      title: 'Trivia App',
       theme: AppTheme.theme,
-      home: const LoginScreen(),
+      routerConfig: AppRoutes.routes,
     );
   }
 }

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:trivia_app/src/constants/assets_paths.dart';
 import 'package:trivia_app/src/features/authentication/widgets/authentication_divider.dart';
+import 'package:trivia_app/src/routes/routes.dart';
 import 'package:trivia_app/src/style/colors.dart';
 import 'package:trivia_app/src/style/margins.dart';
 import 'package:trivia_app/src/style/theme.dart';
@@ -73,9 +75,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ),
                 const SizedBox(width: 4),
                 GestureDetector(
-                  onTap: () {},
+                  onTap: () => context.pushNamed(AppRoutes.login),
                   child: const Text(
-                    'Sign In',
+                    'Login',
                     style: TextStyle(
                       fontSize: 14,
                       color: AppColors.primary,

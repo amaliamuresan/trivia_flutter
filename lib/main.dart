@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:trivia_app/src/features/authentication/views/register_screen.dart';
+import 'package:trivia_app/src/features/authentication/views/login_screen.dart';
 import 'package:trivia_app/src/style/theme.dart';
 
 void main() {
@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: AppTheme.theme,
-      home: const RegisterScreen(),
+      home: const LoginScreen(),
     );
   }
 }

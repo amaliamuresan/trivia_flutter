@@ -6,14 +6,17 @@ import 'package:trivia_app/src/style/margins.dart';
 import 'package:trivia_app/src/style/theme.dart';
 import 'package:trivia_app/src/widgets/buttons/custom_button.dart';
 
-class RegisterScreen extends StatefulWidget {
-  const RegisterScreen({super.key});
+class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key});
 
   @override
-  State<RegisterScreen> createState() => _RegisterScreenState();
+  State<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _RegisterScreenState extends State<RegisterScreen> {
+class _LoginScreenState extends State<LoginScreen> {
+  final passwordController = TextEditingController();
+  final emailController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,9 +28,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
             const Spacer(),
             Row(
               children: [
-                Text('Sign', style: AppTheme.theme.textTheme.headlineLarge),
+                Text('Welcome back',
+                    style: AppTheme.theme.textTheme.headlineLarge),
                 Text(
-                  ' Up',
+                  '!',
                   style: AppTheme.theme.textTheme.headlineLarge
                       ?.copyWith(color: AppColors.primary),
                 )
@@ -39,13 +43,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             ),
             const SizedBox(height: 18),
             TextFormField(
-              decoration: const InputDecoration(
-                labelText: 'Username',
-              ),
-            ),
-            const SizedBox(height: 18),
-            TextFormField(
-              validator: validatePassword,
+              controller: passwordController,
               decoration: const InputDecoration(
                 labelText: 'Password',
               ),
@@ -53,14 +51,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
             const SizedBox(height: 24),
             CustomButton.primary(
               onPressed: () {},
-              text: 'Register',
+              text: 'Login',
             ),
             const SizedBox(height: 24),
             const AuthenticationDivider(),
             const SizedBox(height: 24),
             CustomButton.outlined(
               onPressed: () {},
-              text: 'Sign Up with Google',
+              text: 'Login with Google',
               leadingIcon: Image.asset(AssetsPaths.googleIcon),
             ),
             const Spacer(),
@@ -68,14 +66,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const Text(
-                  'Already have an account?',
+                  "Don't have an account?",
                   style: TextStyle(fontSize: 14),
                 ),
                 const SizedBox(width: 4),
                 GestureDetector(
                   onTap: () {},
                   child: const Text(
-                    'Sign In',
+                    'Register',
                     style: TextStyle(
                       fontSize: 14,
                       color: AppColors.primary,
@@ -88,13 +86,5 @@ class _RegisterScreenState extends State<RegisterScreen> {
         ),
       ),
     );
-  }
-
-  String? validatePassword(String? value) {
-    if (value == null || value.length < 6) {
-      return 'Password is invalid';
-    } else {
-      return null;
-    }
   }
 }

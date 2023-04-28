@@ -13,6 +13,7 @@ class AppTheme {
     inputDecorationTheme: const InputDecorationTheme(
       focusColor: AppColors.primary,
       suffixIconColor: AppColors.greyLight,
+      errorMaxLines: 1,
       contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       border: OutlineInputBorder(
         borderSide: BorderSide(width: 2),
@@ -22,6 +23,12 @@ class AppTheme {
           color: AppColors.red,
         ),
       ),
+      focusedErrorBorder: OutlineInputBorder(
+        borderSide: BorderSide(
+          color: AppColors.red,
+        ),
+      ),
+      errorStyle: TextStyle(color: AppColors.red),
       focusedBorder: OutlineInputBorder(
         borderSide: BorderSide(
           color: AppColors.primary,

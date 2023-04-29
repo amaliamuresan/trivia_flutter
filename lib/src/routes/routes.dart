@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
-import 'package:trivia_app/src/features/authentication/views/login_screen.dart';
-import 'package:trivia_app/src/features/authentication/views/register_screen.dart';
+import 'package:trivia_app/src/features/authentication/presentation/screens/login_screen.dart';
+import 'package:trivia_app/src/features/authentication/presentation/screens/register_screen.dart';
 
 class AppRoutes {
   const AppRoutes._();

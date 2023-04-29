@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:trivia_app/src/constants/assets_paths.dart';
-import 'package:trivia_app/src/features/authentication/widgets/authentication_divider.dart';
+import 'package:trivia_app/src/features/authentication/presentation/widgets/authentication_divider.dart';
 import 'package:trivia_app/src/routes/routes.dart';
 import 'package:trivia_app/src/style/colors.dart';
 import 'package:trivia_app/src/style/margins.dart';
@@ -30,12 +30,10 @@ class _LoginScreenState extends State<LoginScreen> {
             const Spacer(),
             Row(
               children: [
-                Text('Welcome back',
-                    style: AppTheme.theme.textTheme.headlineLarge),
+                Text('Welcome back', style: AppTheme.theme.textTheme.headlineLarge),
                 Text(
                   '!',
-                  style: AppTheme.theme.textTheme.headlineLarge
-                      ?.copyWith(color: AppColors.primary),
+                  style: AppTheme.theme.textTheme.headlineLarge?.copyWith(color: AppColors.primary),
                 )
               ],
             ),

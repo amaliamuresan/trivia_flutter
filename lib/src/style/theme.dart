@@ -59,6 +59,6 @@ class AppTheme {
       cursorColor: AppColors.primary,
       selectionHandleColor: AppColors.accentColor,
     ),
-    bottomAppBarTheme: const BottomAppBarTheme(color: AppColors.surface, elevation: 0),
+    bottomAppBarTheme: const BottomAppBarTheme(color: AppColors.surface, elevation: 0, ),
   );
 }

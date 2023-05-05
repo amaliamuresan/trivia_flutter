@@ -18,7 +18,8 @@ class RegisterScreen extends StatefulWidget {
 class _RegisterScreenState extends State<RegisterScreen> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return Scaffold(resizeToAvoidBottomInset:false,
+
       body: Padding(
         padding: const EdgeInsets.all(AppMargins.regularMargin),
         child: Column(
@@ -75,7 +76,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ),
                 const SizedBox(width: 4),
                 GestureDetector(
-                  onTap: () => context.pushNamed(AppRoutes.login),
+                  onTap: () => context.pushNamed(RouteNames.login),
                   child: const Text(
                     'Login',
                     style: TextStyle(

@@ -52,7 +52,7 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
             const SizedBox(height: 24),
             CustomButton.primary(
-              onPressed: () {},
+              onPressed: () => context.goNamed(RouteNames.home),
               text: 'Login',
             ),
             const SizedBox(height: 24),
@@ -74,7 +74,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 const SizedBox(width: 4),
                 GestureDetector(
                   onTap: () {
-                    context.pushNamed(AppRoutes.register);
+                    context.pushNamed(RouteNames.register);
                   },
                   child: const Text(
                     'Register',

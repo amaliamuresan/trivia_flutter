@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:trivia_app/src/style/margins.dart';
 import 'package:trivia_app/src/widgets/app_bars/custom_bottom_nav_bar.dart';
 
 class MainScreen extends StatefulWidget {
@@ -23,14 +24,18 @@ class _MainScreenState extends State<MainScreen> {
 
   void _onItemTapped(BuildContext context, int tabIndex) {
     if (tabIndex != _currentIndex) {
-      context.go(tabs[tabIndex].initialLocation);
+        context.go(tabs[tabIndex].initialLocation);
+
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: widget.child,
+      body: Padding(
+        padding: const EdgeInsets.all(AppMargins.smallMargin),
+        child: widget.child,
+      ),
       bottomNavigationBar: CustomBottomNavBar(
         items: tabs,
         currentIndex: _currentIndex,
@@ -44,11 +49,6 @@ class _MainScreenState extends State<MainScreen> {
       initialLocation: '/home',
       icon: Icon(Icons.home),
       label: 'Home',
-    ),
-    CustomNavBarItem(
-      initialLocation: '/profile',
-      icon: Icon(Icons.person),
-      label: 'Profile',
     ),
     CustomNavBarItem(
       icon: Icon(Icons.notifications),

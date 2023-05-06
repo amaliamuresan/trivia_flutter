@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:trivia_app/src/features/authentication/views/login_screen.dart';
 import 'package:trivia_app/src/features/authentication/views/register_screen.dart';
+import 'package:trivia_app/src/features/home/presentation/pages/home_page.dart';
 import 'package:trivia_app/src/features/main/presentation/main_screen.dart';
 
 part 'route_names.dart';
@@ -52,22 +53,7 @@ class AppRoutes {
         pageBuilder: (BuildContext context, GoRouterState state) {
           return const NoTransitionPage(
             child: MainScreen(
-              child: Center(
-                child: Text('Home'),
-              ),
-            ),
-          );
-        },
-      ),
-      GoRoute(
-        path: '/profile',
-        name: RouteNames.profile,
-        pageBuilder: (BuildContext context, GoRouterState state) {
-          return const NoTransitionPage(
-            child: MainScreen(
-              child: Center(
-                child: Text('Profile'),
-              ),
+              child: HomePage(),
             ),
           );
         },

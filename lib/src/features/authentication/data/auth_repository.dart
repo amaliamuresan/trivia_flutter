@@ -10,17 +10,18 @@ class AuthRepository {
   static final AuthRepository _singleton = AuthRepository._internal();
   final FirebaseAuth _authInstance = FirebaseAuth.instance;
 
-  Future<UserCredential?> registerWithEmailAndPassword({
+  /// TODO: Put username back
+  Future<AuthUserData?> registerWithEmailAndPassword({
     required String emailAddress,
     required String password,
-    required String username,
+    // required String username,
   }) async {
     try {
       final credential = await _authInstance.createUserWithEmailAndPassword(
         email: emailAddress,
         password: password,
       );
-      return credential;
+      return credential.user?.toUser;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
         if (kDebugMode) {
@@ -39,7 +40,7 @@ class AuthRepository {
     return null;
   }
 
-  Future<UserCredential?> loginWithEmailAndPassword({
+  Future<AuthUserData?> loginWithEmailAndPassword({
     required String emailAddress,
     required String password,
   }) async {
@@ -48,7 +49,7 @@ class AuthRepository {
         email: emailAddress,
         password: password,
       );
-      return credential;
+      return credential.user?.toUser;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         if (kDebugMode) {
@@ -65,6 +66,10 @@ class AuthRepository {
       }
     }
     return null;
+  }
+
+  Future<void> logOut() async {
+    await _authInstance.signOut();
   }
 
   Stream<AuthUserData> get userData {

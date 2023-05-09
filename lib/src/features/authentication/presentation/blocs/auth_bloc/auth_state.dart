@@ -14,6 +14,7 @@ class AuthState extends Equatable {
 
   final AppStatus status;
   final AuthUserData authUserData;
+  bool get isAuthenticated => authUserData != AuthUserData.empty;
 
   AuthState copyWith({
     AppStatus? status,

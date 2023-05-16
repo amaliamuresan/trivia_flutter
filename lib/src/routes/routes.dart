@@ -7,6 +7,7 @@ import 'package:trivia_app/src/features/authentication/presentation/screens/logi
 import 'package:trivia_app/src/features/authentication/presentation/screens/register_screen.dart';
 import 'package:trivia_app/src/features/home/presentation/pages/home_page.dart';
 import 'package:trivia_app/src/features/main/presentation/main_screen.dart';
+import 'package:trivia_app/src/features/quiz_menu/data/open_trivia_repository.dart';
 
 part 'route_names.dart';
 
@@ -135,6 +136,15 @@ class AppRoutes {
                           );
                         },
                         child: const Text('Sign out'),
+                      ),
+                    ),
+                    Container(
+                      height: 45,
+                      child: ElevatedButton(
+                        onPressed: () async {
+                          await OpenTriviaRepository().getQuestions();
+                        },
+                        child: const Text('Request'),
                       ),
                     ),
                   ],

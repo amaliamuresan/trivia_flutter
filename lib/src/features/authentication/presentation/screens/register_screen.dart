@@ -20,10 +20,9 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
-  /// TODO: dispose controllers
-  /// TODO: add username controller
   final passwordController = TextEditingController();
   final emailController = TextEditingController();
+  final displayNameController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -57,8 +56,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
               ),
               const SizedBox(height: 18),
               TextFormField(
+                controller: displayNameController,
                 decoration: const InputDecoration(
-                  labelText: 'Username',
+                  labelText: 'Display Name',
                 ),
               ),
               const SizedBox(height: 18),
@@ -76,6 +76,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     RegisterWithEmailAndPass(
                       email: emailController.text,
                       password: passwordController.text,
+                      displayName: displayNameController.text,
                     ),
                   );
                 },
@@ -123,5 +124,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
     } else {
       return null;
     }
+  }
+
+  @override
+  void dispose() {
+    passwordController.dispose();
+    emailController.dispose();
+    super.dispose();
   }
 }

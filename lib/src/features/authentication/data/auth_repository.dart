@@ -10,11 +10,9 @@ class AuthRepository {
   static final AuthRepository _singleton = AuthRepository._internal();
   final FirebaseAuth _authInstance = FirebaseAuth.instance;
 
-  /// TODO: Put username back
   Future<AuthUserData?> registerWithEmailAndPassword({
     required String emailAddress,
     required String password,
-    // required String username,
   }) async {
     try {
       final credential = await _authInstance.createUserWithEmailAndPassword(

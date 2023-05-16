@@ -64,7 +64,7 @@ class AppRoutes {
         path: '/register',
         name: RouteNames.register,
         builder: (BuildContext context, GoRouterState state) {
-          return RegisterScreen(
+          return const RegisterScreen(
             redirectLocation: RouteNames.home,
           );
         },
@@ -125,7 +125,7 @@ class AppRoutes {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     const Text('More'),
-                    Container(
+                    SizedBox(
                       height: 45,
                       child: ElevatedButton(
                         onPressed: () {
@@ -138,7 +138,7 @@ class AppRoutes {
                         child: const Text('Sign out'),
                       ),
                     ),
-                    Container(
+                    SizedBox(
                       height: 45,
                       child: ElevatedButton(
                         onPressed: () async {

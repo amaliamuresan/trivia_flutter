@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:trivia_app/src/features/authentication/data/auth_repository.dart';
 import 'package:trivia_app/src/features/authentication/domain/models/auth_user_data.dart';
+import 'package:trivia_app/src/features/authentication/domain/services/auth_service.dart';
 
 part 'auth_event.dart';
 part 'auth_state.dart';
@@ -33,6 +34,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   late final StreamSubscription<AuthUserData> _userSubscription;
   final AuthRepository _authRepository = AuthRepository();
+  final AuthService _authService = AuthService();
 
   void _onAuthDataChangedChanged(AuthDataChanged event, Emitter<AuthState> emit) {
     if (kDebugMode) {
@@ -65,9 +67,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   }
 
   Future<void> _onRegisterWithEmailAndPass(RegisterWithEmailAndPass event, Emitter<AuthState> emit) async {
-    final userData = await _authRepository.registerWithEmailAndPassword(
+    final userData = await _authService.registerWithEmailAndPassword(
       emailAddress: event.email,
-      password: event.password,
+      password: event.password, displayName: event.displayName,
     );
     emit(state.copyWith(authUserData: userData));
   }

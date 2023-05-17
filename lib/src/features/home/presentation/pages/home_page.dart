@@ -4,6 +4,9 @@ import 'package:trivia_app/src/features/home/presentation/widgets/category_item.
 import 'package:trivia_app/src/features/profile/presentation/widgets/logged_user_profile_widget.dart';
 import 'package:trivia_app/src/features/quiz_menu/data/open_trivia_repository.dart';
 import 'package:trivia_app/src/features/quiz_menu/domain/quiz_category.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
+import 'package:trivia_app/src/features/authentication/presentation/blocs/auth_bloc/auth_bloc.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -38,17 +41,33 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        AvatarTileWidget(
-          username: 'Andrei Popescu',
-          onTap: () {
-            showModalBottomSheet<Widget>(
-              context: context,
-              builder: (BuildContext context) {
-                return const LoggedUserProfileWidget();
+        GestureDetector(
+          onTap: () => context.pushNamed(RouteNames.search),
+          child: const CustomSearchField(
+            isEnabled: false,
+          ),
+        ),
+        const SizedBox(height: AppMargins.smallMargin),
+        BlocBuilder<AuthBloc, AuthState>(
+          buildWhen: (previous, current) =>
+          previous.publicUserData != current.publicUserData,
+          builder: (context, state) {
+            return AvatarTileWidget(
+              username: state.publicUserData.displayName ?? '',
+              avatarUrl: state.publicUserData.photoUrl,
+              onTap: () {
+                showModalBottomSheet<Widget>(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return LoggedUserProfileWidget(
+                      userData: state.publicUserData,
+                    );
+                  },
+                );
               },
             );
           },
-        ),
+        )
         if (isLoading)
           CircularProgressIndicator()
         else

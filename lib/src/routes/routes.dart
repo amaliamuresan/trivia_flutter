@@ -8,6 +8,7 @@ import 'package:trivia_app/src/features/authentication/presentation/screens/regi
 import 'package:trivia_app/src/features/home/presentation/pages/home_page.dart';
 import 'package:trivia_app/src/features/main/presentation/main_screen.dart';
 import 'package:trivia_app/src/features/quiz_menu/data/open_trivia_repository.dart';
+import 'package:trivia_app/src/features/search/presentation/pages/search_page.dart';
 
 part 'route_names.dart';
 
@@ -64,7 +65,7 @@ class AppRoutes {
         path: '/register',
         name: RouteNames.register,
         builder: (BuildContext context, GoRouterState state) {
-          return RegisterScreen(
+          return const RegisterScreen(
             redirectLocation: RouteNames.home,
           );
         },
@@ -78,7 +79,14 @@ class AppRoutes {
           );
         },
       ),
-      _mainRoutes
+      _mainRoutes,
+      GoRoute(
+        path: RouteLocations.search,
+        name: RouteNames.search,
+        builder: (BuildContext context, GoRouterState state) {
+          return const SearchPage();
+        },
+      ),
     ],
   );
 
@@ -125,7 +133,7 @@ class AppRoutes {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     const Text('More'),
-                    Container(
+                    SizedBox(
                       height: 45,
                       child: ElevatedButton(
                         onPressed: () {
@@ -138,7 +146,7 @@ class AppRoutes {
                         child: const Text('Sign out'),
                       ),
                     ),
-                    Container(
+                    SizedBox(
                       height: 45,
                       child: ElevatedButton(
                         onPressed: () async {

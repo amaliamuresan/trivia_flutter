@@ -10,11 +10,9 @@ class AuthRepository {
   static final AuthRepository _singleton = AuthRepository._internal();
   final FirebaseAuth _authInstance = FirebaseAuth.instance;
 
-  /// TODO: Put username back
   Future<AuthUserData?> registerWithEmailAndPassword({
     required String emailAddress,
     required String password,
-    // required String username,
   }) async {
     try {
       final credential = await _authInstance.createUserWithEmailAndPassword(
@@ -74,20 +72,23 @@ class AuthRepository {
 
   Stream<AuthUserData> get userData {
     return _authInstance.authStateChanges().map((User? firebaseUser) {
-      final userData = firebaseUser == null ? AuthUserData.empty : firebaseUser.toUser;
+      final userData =
+          firebaseUser == null ? AuthUserData.empty : firebaseUser.toUser;
       return userData;
     });
   }
 
   AuthUserData get currentUserData {
     final firebaseUser = _authInstance.currentUser;
-    final userData = firebaseUser == null ? AuthUserData.empty : firebaseUser.toUser;
+    final userData =
+        firebaseUser == null ? AuthUserData.empty : firebaseUser.toUser;
     return userData;
   }
 }
 
 extension on User {
   AuthUserData get toUser {
-    return AuthUserData(id: uid, email: email, displayName: displayName, photo: photoURL);
+    return AuthUserData(
+        id: uid, email: email, displayName: displayName, photo: photoURL);
   }
 }

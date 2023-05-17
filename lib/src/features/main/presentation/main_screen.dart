@@ -18,20 +18,23 @@ class _MainScreenState extends State<MainScreen> {
   int get _currentIndex => _locationToTabIndex(GoRouter.of(context).location);
 
   int _locationToTabIndex(String location) {
-    final index = tabs.indexWhere((t) => location.startsWith(t.initialLocation));
+    final index =
+        tabs.indexWhere((t) => location.startsWith(t.initialLocation));
     return index < 0 ? 0 : index;
   }
 
   void _onItemTapped(BuildContext context, int tabIndex) {
     if (tabIndex != _currentIndex) {
-        context.go(tabs[tabIndex].initialLocation);
-
+      context.go(tabs[tabIndex].initialLocation);
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        toolbarHeight: 0,
+      ),
       body: Padding(
         padding: const EdgeInsets.all(AppMargins.smallMargin),
         child: widget.child,

@@ -1,51 +1,57 @@
 import 'package:flutter/material.dart';
+import 'package:trivia_app/src/features/profile/domain/firestore_user_public_data.dart';
 import 'package:trivia_app/src/features/profile/presentation/widgets/avatar_widget.dart';
+import 'package:trivia_app/src/features/profile/presentation/widgets/user_statistics_widget.dart';
 import 'package:trivia_app/src/style/style.dart';
 
 class LoggedUserProfileWidget extends StatelessWidget {
-  const LoggedUserProfileWidget({super.key});
+  const LoggedUserProfileWidget({super.key, required this.userData});
+
+  final FirestoreUserPublicData userData;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      // decoration: const BoxDecoration(
-      //   borderRadius: BorderRadius.only(
-      //     topLeft: Radius.circular(16),
-      //     topRight: Radius.circular(16),
-      //   ),
-      // ),
-      child: Padding(
-        padding: const EdgeInsets.all(AppMargins.regularMargin),
-        child: Column(
-          children: [
-            Stack(
-              alignment: Alignment.bottomRight,
-              children: [
-                const AvatarWidget(),
-                GestureDetector(
-                  onTap: () {},
-                  child: const _EditProfileIcon(),
-                ),
-              ],
-            ),
-            const SizedBox(height: AppMargins.regularMargin),
-            const Text(
-              'Andrei Popescu',
-              style: TextStyle(fontWeight: FontWeight.w600),
-            ),
-            const SizedBox(height: AppMargins.bigMargin),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                const _UserInfoWidget(upperText: '170', lowerText: 'games played'),
-                divider,
-                const _UserInfoWidget(upperText: '47%', lowerText: 'win rate'),
-                divider,
-                const _UserInfoWidget(upperText: '14', lowerText: 'friends'),
-              ],
-            )
-          ],
-        ),
+    return Padding(
+      padding: const EdgeInsets.all(AppMargins.regularMargin),
+      child: Column(
+        children: [
+          Stack(
+            alignment: Alignment.bottomRight,
+            children: [
+              const AvatarWidget(),
+              GestureDetector(
+                onTap: () {},
+                child: const _EditProfileIcon(),
+              ),
+            ],
+          ),
+          const SizedBox(height: AppMargins.regularMargin),
+          Text(
+            userData.displayName ?? '',
+            style: const TextStyle(fontWeight: FontWeight.w600),
+          ),
+          const SizedBox(height: AppMargins.bigMargin),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              UserStatisticsWidget(
+                upperText: '${userData.nrOfMatchesPlayed ?? 0}',
+                lowerText: 'matches',
+              ),
+              divider,
+              UserStatisticsWidget(
+                upperText:
+                    '${(userData.nrOfMatchesWon ?? 0) ~/ (userData.nrOfMatchesPlayed ?? 1)}%',
+                lowerText: 'win rate',
+              ),
+              divider,
+              UserStatisticsWidget(
+                upperText: '${userData.friendsUids?.length ?? 0}',
+                lowerText: 'friends',
+              ),
+            ],
+          )
+        ],
       ),
     );
   }
@@ -80,30 +86,6 @@ class _EditProfileIcon extends StatelessWidget {
           size: 16,
         ),
       ),
-    );
-  }
-}
-
-class _UserInfoWidget extends StatelessWidget {
-  const _UserInfoWidget({required this.upperText, required this.lowerText});
-
-  final String upperText;
-  final String lowerText;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Text(
-          upperText,
-          style: const TextStyle(color: AppColors.primary),
-        ),
-        const SizedBox(height: AppMargins.extraSmallMargin),
-        Text(
-          lowerText,
-          style: const TextStyle(fontSize: 14),
-        ),
-      ],
     );
   }
 }

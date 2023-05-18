@@ -9,8 +9,7 @@ class FirestoreUserPublicRepository {
 
   FirestoreUserPublicRepository._internal() : super();
 
-  static final FirestoreUserPublicRepository _singleton =
-      FirestoreUserPublicRepository._internal();
+  static final FirestoreUserPublicRepository _singleton = FirestoreUserPublicRepository._internal();
 
   final CollectionReference<Map<String, dynamic>> _collectionReference =
       FirebaseFirestore.instance.collection('userPublicData');
@@ -25,8 +24,13 @@ class FirestoreUserPublicRepository {
     }
   }
 
-  Future<List<FirestoreUserPublicData>?> getUserByDisplayName(
-      String displayName) async {
+  Future<FirestoreUserPublicData> getUserPublicDataById(String userId) async {
+    final snapshot = await _collectionReference.doc(userId).get();
+    final body = snapshot.data()!;
+    return FirestoreUserPublicData.fromJson(body, userId);
+  }
+
+  Future<List<FirestoreUserPublicData>?> getUserByDisplayName(String displayName) async {
     try {
       final QuerySnapshot data = await _collectionReference
           .where('displayName', isGreaterThanOrEqualTo: displayName)

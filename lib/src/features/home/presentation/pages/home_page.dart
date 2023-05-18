@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
+import 'package:trivia_app/src/features/authentication/presentation/blocs/auth_bloc/auth_bloc.dart';
 import 'package:trivia_app/src/features/home/presentation/widgets/avatar_tile_widget.dart';
 import 'package:trivia_app/src/features/home/presentation/widgets/category_item.dart';
 import 'package:trivia_app/src/features/profile/presentation/widgets/logged_user_profile_widget.dart';
 import 'package:trivia_app/src/features/quiz_menu/data/open_trivia_repository.dart';
 import 'package:trivia_app/src/features/quiz_menu/domain/quiz_category.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
-import 'package:trivia_app/src/features/authentication/presentation/blocs/auth_bloc/auth_bloc.dart';
+import 'package:trivia_app/src/routes/routes.dart';
+import 'package:trivia_app/src/style/style.dart';
+import 'package:trivia_app/src/widgets/text_fields/custom_search_field.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -49,8 +52,7 @@ class _HomePageState extends State<HomePage> {
         ),
         const SizedBox(height: AppMargins.smallMargin),
         BlocBuilder<AuthBloc, AuthState>(
-          buildWhen: (previous, current) =>
-          previous.publicUserData != current.publicUserData,
+          buildWhen: (previous, current) => previous.publicUserData != current.publicUserData,
           builder: (context, state) {
             return AvatarTileWidget(
               username: state.publicUserData.displayName ?? '',
@@ -67,7 +69,7 @@ class _HomePageState extends State<HomePage> {
               },
             );
           },
-        )
+        ),
         if (isLoading)
           CircularProgressIndicator()
         else
@@ -85,6 +87,7 @@ class _HomePageState extends State<HomePage> {
                 return SizedBox(
                   // height: 800,
                   child: CategoryItem(
+                    onTap: () {},
                     categoryTitle: quizCategories[index].name,
                   ),
                 );

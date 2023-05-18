@@ -82,6 +82,7 @@ class _QuizMatchScreenState extends State<QuizMatchScreen> {
     }
 
     return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Row(),
         Text(
@@ -99,21 +100,37 @@ class _QuizMatchScreenState extends State<QuizMatchScreen> {
           height: 20,
         ),
         Container(
-          height: 30,
+          height: 40,
+          width: double.infinity,
           color: Colors.red,
-          child: Text(
-            _convertHtmlText(session.questions[session.currentQuestionIndex].correctAnswer),
-            style: const TextStyle(color: Colors.white),
-          ),
-        ),
-        ...session.questions[session.currentQuestionIndex].incorrectAnswers.map(
-          (answer) => Container(
-            height: 30,
-            color: Colors.red,
+          child: Center(
             child: Text(
-              _convertHtmlText(answer),
+              _convertHtmlText(session.questions[session.currentQuestionIndex].correctAnswer),
               style: const TextStyle(color: Colors.white),
             ),
+          ),
+        ),
+        const SizedBox(
+          height: 5,
+        ),
+        ...session.questions[session.currentQuestionIndex].incorrectAnswers.map(
+          (answer) => Column(
+            children: [
+              Container(
+                height: 40,
+                width: double.infinity,
+                color: Colors.red,
+                child: Center(
+                  child: Text(
+                    _convertHtmlText(answer),
+                    style: const TextStyle(color: Colors.white),
+                  ),
+                ),
+              ),
+              const SizedBox(
+                height: 5,
+              ),
+            ],
           ),
         ),
       ],

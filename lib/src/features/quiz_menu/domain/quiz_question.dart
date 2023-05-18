@@ -12,12 +12,12 @@ class QuizQuestion {
 
   factory QuizQuestion.fromMap(Map<String, dynamic> map) {
     return QuizQuestion(
-      category: _convertHtmlText(map['category'] as String),
-      type: _convertHtmlText(map['type'] as String),
-      difficulty: _convertHtmlText(map['difficulty'] as String),
-      question: _convertHtmlText(map['question'] as String),
-      correctAnswer: _convertHtmlText(map['correct_answer'] as String),
-      incorrectAnswers: (map['incorrect_answers'] as List).map((e) => _convertHtmlText(e as String)).toList(),
+      category: map['category'] as String,
+      type: map['type'] as String,
+      difficulty: map['difficulty'] as String,
+      question: map['question'] as String,
+      correctAnswer: map['correct_answer'] as String,
+      incorrectAnswers: (map['incorrect_answers'] as List).map((e) => e as String).toList(),
     );
   }
 
@@ -43,5 +43,16 @@ class QuizQuestion {
   @override
   String toString() {
     return 'QuizQuestion{category: $category, type: $type, difficulty: $difficulty, question: $question, correctAnswer: $correctAnswer, incorrectAnswers: $incorrectAnswers}';
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'category': category,
+      'type': type,
+      'difficulty': difficulty,
+      'question': question,
+      'correct_answer': correctAnswer,
+      'incorrect_answers': incorrectAnswers,
+    };
   }
 }

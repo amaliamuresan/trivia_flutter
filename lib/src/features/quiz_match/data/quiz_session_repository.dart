@@ -9,7 +9,17 @@ class QuizSessionRepository {
 
   final CollectionReference matchesCollection = FirebaseFirestore.instance.collection('matches');
 
-  Future<void> createMatch({required QuizSession sessionDetails}) async {
-    await matchesCollection.doc().set(sessionDetails.toMap());
+  Future<String> createMatch({required QuizSession sessionDetails}) async {
+    final document = matchesCollection.doc();
+    await document.set(sessionDetails.toMap());
+    return document.id;
+  }
+
+  Future<void> connectToMatch({required bool isChallenger, required String matchId, required String playerId}) async {
+    final updateField = isChallenger ? 'challengerConnected' : 'otherPlayerConnected';
+
+    final updateMap = <String, dynamic>{updateField: true};
+
+    await matchesCollection.doc(matchId).update(updateMap);
   }
 }

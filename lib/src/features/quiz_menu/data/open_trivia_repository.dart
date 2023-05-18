@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:html/parser.dart';
 import 'package:http/http.dart' as http;
 import 'package:trivia_app/src/features/quiz_menu/domain/quiz_category.dart';
 import 'package:trivia_app/src/features/quiz_menu/domain/quiz_question.dart';
@@ -24,7 +25,7 @@ class OpenTriviaRepository {
   }
 
   Future<List<QuizQuestion>> getQuestions({
-    String? categoryId,
+    int? categoryId,
     int amount = 10,
 
     /// multiple or boolean
@@ -35,7 +36,7 @@ class OpenTriviaRepository {
   }) async {
     final queryParameters = <String, dynamic>{
       'amount': amount.toString(),
-      'category': categoryId,
+      'category': categoryId.toString(),
       'difficulty': difficulty,
       'type': type,
     }..removeWhere((key, value) => value == null);
@@ -47,8 +48,14 @@ class OpenTriviaRepository {
         HttpHeaders.contentTypeHeader: 'application/json',
       },
     );
+    // print(_convertHtmlText(response.body));
+    // print(response.body);
     final body = jsonDecode(response.body) as Map<String, dynamic>;
     print(body);
     return QuizQuestion.fromList(body['results'] as List);
+  }
+
+  static String _convertHtmlText(String htmlText) {
+    return parse(htmlText).body!.text;
   }
 }

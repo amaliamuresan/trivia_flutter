@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:trivia_app/src/features/notifications/presentation/widgets/friend_requests_list_widget.dart';
-import 'package:trivia_app/src/features/notifications/presentation/widgets/match_requests_list_widget.dart';
+import 'package:trivia_app/src/features/notifications/temp_notification_challenges.dart';
 import 'package:trivia_app/src/style/style.dart';
 
 class NotificationsPage extends StatelessWidget {
@@ -22,13 +22,16 @@ class NotificationsPage extends StatelessWidget {
                 text: 'Friend requests',
               )
             ],
-            indicatorPadding:
-                EdgeInsets.symmetric(horizontal: AppMargins.bigMargin),
+            indicatorPadding: EdgeInsets.symmetric(horizontal: AppMargins.bigMargin),
             indicatorColor: AppColors.accentColor,
           ),
         ),
         body: const TabBarView(
-          children: [MatchRequestsListWidget(), FriendRequestsListWidget()],
+          children: [
+            //MatchRequestsListWidget(),
+            TempNotificationChallenges(),
+            FriendRequestsListWidget(),
+          ],
         ),
       ),
     );

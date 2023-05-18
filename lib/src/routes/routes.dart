@@ -7,7 +7,9 @@ import 'package:trivia_app/src/features/authentication/presentation/screens/logi
 import 'package:trivia_app/src/features/authentication/presentation/screens/register_screen.dart';
 import 'package:trivia_app/src/features/home/presentation/pages/home_page.dart';
 import 'package:trivia_app/src/features/main/presentation/main_screen.dart';
+import 'package:trivia_app/src/features/quiz_match/presentation/screens/quiz_page_screen.dart';
 import 'package:trivia_app/src/features/quiz_menu/data/open_trivia_repository.dart';
+import 'package:trivia_app/src/features/quiz_menu/domain/quiz_category.dart';
 import 'package:trivia_app/src/features/search/presentation/pages/search_page.dart';
 
 part 'route_names.dart';
@@ -85,6 +87,14 @@ class AppRoutes {
         name: RouteNames.search,
         builder: (BuildContext context, GoRouterState state) {
           return const SearchPage();
+        },
+      ),
+      GoRoute(
+        path: RouteLocations.quizPage,
+        name: RouteNames.quizPage,
+        builder: (BuildContext context, GoRouterState state) {
+          final category = state.extra! as QuizCategory;
+          return QuizPageScreen(category: category);
         },
       ),
     ],

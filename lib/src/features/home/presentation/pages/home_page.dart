@@ -71,7 +71,7 @@ class _HomePageState extends State<HomePage> {
           },
         ),
         if (isLoading)
-          CircularProgressIndicator()
+          const CircularProgressIndicator()
         else
           Expanded(
             child: GridView.builder(
@@ -87,7 +87,9 @@ class _HomePageState extends State<HomePage> {
                 return SizedBox(
                   // height: 800,
                   child: CategoryItem(
-                    onTap: () {},
+                    onTap: () {
+                      context.pushNamed(RouteNames.quizPage, extra: quizCategories[index]);
+                    },
                     categoryTitle: quizCategories[index].name,
                   ),
                 );

@@ -9,6 +9,7 @@ class RouteNames {
   static const String notifications = 'notifications';
   static const String more = 'more';
   static const String search = 'search';
+  static const String quizPage = 'quiz_page';
 }
 
 class RouteLocations {
@@ -20,4 +21,5 @@ class RouteLocations {
   static const String notifications = '/notifications';
   static const String more = '/more';
   static const String search = '/search';
+  static const String quizPage = '/quiz_page';
 }

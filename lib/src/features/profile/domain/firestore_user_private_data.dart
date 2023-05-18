@@ -7,13 +7,17 @@ class FirestoreUserPrivateData extends Equatable {
   });
 
   FirestoreUserPrivateData.fromJson(Map<String, dynamic> json)
-        :receivedFriendRequests = json['receivedFriendRequests'] as List<String>?,
-        sentFriendRequests = json['sentFriendRequests'] as  List<String>?;
+      : receivedFriendRequests = (json['receivedFriendRequests'] as List?)
+            ?.map((e) => e as String)
+            .toList(),
+        sentFriendRequests = (json['sentFriendRequests'] as List?)
+            ?.map((e) => e as String)
+            .toList();
 
   Map<String, dynamic> toJson() => {
-    'sentFriendRequests': sentFriendRequests,
-    'receivedFriendRequests': receivedFriendRequests,
-  };
+        'sentFriendRequests': sentFriendRequests,
+        'receivedFriendRequests': receivedFriendRequests,
+      };
 
   final List<String>? sentFriendRequests;
 
@@ -26,5 +30,6 @@ class FirestoreUserPrivateData extends Equatable {
   bool get isNotEmpty => this != FirestoreUserPrivateData.empty;
 
   @override
-  List<Object?> get props => <Object?>[sentFriendRequests, receivedFriendRequests];
+  List<Object?> get props =>
+      <Object?>[sentFriendRequests, receivedFriendRequests];
 }

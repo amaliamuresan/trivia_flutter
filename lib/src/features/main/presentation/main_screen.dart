@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:trivia_app/src/style/margins.dart';
 import 'package:trivia_app/src/widgets/app_bars/custom_bottom_nav_bar.dart';
 
 class MainScreen extends StatefulWidget {
@@ -35,10 +34,7 @@ class _MainScreenState extends State<MainScreen> {
       appBar: AppBar(
         toolbarHeight: 0,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(AppMargins.smallMargin),
-        child: widget.child,
-      ),
+      body: widget.child,
       bottomNavigationBar: CustomBottomNavBar(
         items: tabs,
         currentIndex: _currentIndex,

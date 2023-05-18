@@ -7,6 +7,7 @@ import 'package:trivia_app/src/features/authentication/presentation/screens/logi
 import 'package:trivia_app/src/features/authentication/presentation/screens/register_screen.dart';
 import 'package:trivia_app/src/features/home/presentation/pages/home_page.dart';
 import 'package:trivia_app/src/features/main/presentation/main_screen.dart';
+import 'package:trivia_app/src/features/notifications/presentation/pages/notifications_page.dart';
 import 'package:trivia_app/src/features/quiz_match/presentation/screens/quiz_page_screen.dart';
 import 'package:trivia_app/src/features/quiz_menu/data/open_trivia_repository.dart';
 import 'package:trivia_app/src/features/quiz_menu/domain/quiz_category.dart';
@@ -122,13 +123,7 @@ class AppRoutes {
         name: RouteNames.notifications,
         pageBuilder: (BuildContext context, GoRouterState state) {
           return const NoTransitionPage(
-            child: MainScreen(
-              child: Center(
-                child: Text(
-                  'Notifications',
-                ),
-              ),
-            ),
+            child: MainScreen(child: NotificationsPage()),
           );
         },
       ),

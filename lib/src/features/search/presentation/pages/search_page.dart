@@ -53,6 +53,7 @@ class SearchPage extends StatelessWidget {
                     const CircularProgressIndicator(
                       color: AppColors.accentColor,
                     )
+                  //TODO: add message for empty list
                 ],
               );
             },

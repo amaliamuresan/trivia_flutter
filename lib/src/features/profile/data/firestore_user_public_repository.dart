@@ -9,7 +9,8 @@ class FirestoreUserPublicRepository {
 
   FirestoreUserPublicRepository._internal() : super();
 
-  static final FirestoreUserPublicRepository _singleton = FirestoreUserPublicRepository._internal();
+  static final FirestoreUserPublicRepository _singleton =
+      FirestoreUserPublicRepository._internal();
 
   final CollectionReference<Map<String, dynamic>> _collectionReference =
       FirebaseFirestore.instance.collection('userPublicData');
@@ -19,9 +20,27 @@ class FirestoreUserPublicRepository {
       await _collectionReference.doc(userData.id).set(userData.toJson());
     } catch (e) {
       if (kDebugMode) {
-        print('AuthService $e');
+        print('addData $e');
       }
     }
+  }
+
+  Future<List<FirestoreUserPublicData>?> getUsersPublicDataByIds(
+    List<String> ids,
+  ) async {
+    try {
+      final users = List<FirestoreUserPublicData>.empty(growable: true);
+      for (final i in ids) {
+        final user = await getUserPublicDataById(i);
+        users.add(user);
+      }
+      return users;
+    } catch (e) {
+      if (kDebugMode) {
+        print('getUsersPublicDataByIds $e');
+      }
+    }
+    return null;
   }
 
   Future<FirestoreUserPublicData> getUserPublicDataById(String userId) async {
@@ -30,7 +49,8 @@ class FirestoreUserPublicRepository {
     return FirestoreUserPublicData.fromJson(body, userId);
   }
 
-  Future<List<FirestoreUserPublicData>?> getUserByDisplayName(String displayName) async {
+  Future<List<FirestoreUserPublicData>?> getUserByDisplayName(
+      String displayName) async {
     try {
       final QuerySnapshot data = await _collectionReference
           .where('displayName', isGreaterThanOrEqualTo: displayName)
@@ -45,6 +65,21 @@ class FirestoreUserPublicRepository {
       }
     }
     return null;
+  }
+
+  Future<void> addFriend(String uid1, String uid2) async {
+    try {
+      await _collectionReference.doc(uid1).update({
+        'friendsUids': FieldValue.arrayUnion([uid2])
+      });
+      await _collectionReference.doc(uid2).update({
+        'friendsUids': FieldValue.arrayUnion([uid1])
+      });
+    } catch (e) {
+      if (kDebugMode) {
+        print('addFriend $e');
+      }
+    }
   }
 
   List<FirestoreUserPublicData> _mapUserPublicDataFromSnapshot(

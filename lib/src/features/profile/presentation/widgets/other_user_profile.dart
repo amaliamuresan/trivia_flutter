@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:trivia_app/src/features/authentication/presentation/blocs/auth_bloc/auth_bloc.dart';
 import 'package:trivia_app/src/features/profile/domain/firestore_user_public_data.dart';
+import 'package:trivia_app/src/features/profile/presentation/blocs/friend_request_bloc/friend_request_bloc.dart';
 import 'package:trivia_app/src/features/profile/presentation/widgets/avatar_widget.dart';
 import 'package:trivia_app/src/features/profile/presentation/widgets/user_statistics_widget.dart';
 import 'package:trivia_app/src/style/style.dart';
@@ -32,78 +33,105 @@ class OtherUserProfile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: 700,
-      child: Padding(
-        padding: const EdgeInsets.all(12),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const AvatarWidget(),
-            const SizedBox(height: AppMargins.regularMargin),
-            Text(
-              userPublicData.displayName ?? '',
-              style: const TextStyle(fontWeight: FontWeight.w600),
-            ),
-            const SizedBox(height: AppMargins.bigMargin),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+    return BlocBuilder<AuthBloc, AuthState>(
+      builder: (context, state) {
+        return SizedBox(
+          width: 700,
+          child: Padding(
+            padding: const EdgeInsets.all(12),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
               children: [
-                Flexible(
-                  child: UserStatisticsWidget(
-                    upperText: '${userPublicData.nrOfMatchesPlayed ?? 0}',
-                    lowerText: 'matches',
-                  ),
+                const AvatarWidget(),
+                const SizedBox(height: AppMargins.regularMargin),
+                Text(
+                  userPublicData.displayName ?? '',
+                  style: const TextStyle(fontWeight: FontWeight.w600),
                 ),
-                divider,
-                Flexible(
-                  child: UserStatisticsWidget(
-                    upperText:
-                        '${(userPublicData.nrOfMatchesWon ?? 0) ~/ (userPublicData.nrOfMatchesPlayed ?? 1)}%',
-                    lowerText: 'win rate',
-                  ),
-                ),
-                divider,
-                Flexible(
-                  child: UserStatisticsWidget(
-                    upperText: '${userPublicData.friendsUids?.length ?? 0}',
-                    lowerText: 'friends',
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: AppMargins.regularMargin * 2),
-            if (isFriend(context) ?? false)
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Flexible(
-                    child: CustomButton.primary(
-                      text: 'Challenge!',
-                      onPressed: () {},
-                    ),
-                  ),
-                  const SizedBox(width: AppMargins.smallMargin),
-                  Flexible(
-                    child: CustomButton.outlined(
-                      text: 'Friends',
-                      onPressed: () {},
-                      leadingIcon: const Icon(
-                        Icons.check,
-                        color: AppColors.primary,
+                const SizedBox(height: AppMargins.bigMargin),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Flexible(
+                      child: UserStatisticsWidget(
+                        upperText: '${userPublicData.nrOfMatchesPlayed ?? 0}',
+                        lowerText: 'matches',
                       ),
                     ),
+                    divider,
+                    Flexible(
+                      child: UserStatisticsWidget(
+                        upperText:
+                            '${(userPublicData.nrOfMatchesWon ?? 0) ~/ (userPublicData.nrOfMatchesPlayed ?? 1)}%',
+                        lowerText: 'win rate',
+                      ),
+                    ),
+                    divider,
+                    Flexible(
+                      child: UserStatisticsWidget(
+                        upperText: '${userPublicData.friendsUids?.length ?? 0}',
+                        lowerText: 'friends',
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: AppMargins.regularMargin * 2),
+                if (isFriend(context) ?? false)
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Flexible(
+                        child: CustomButton.primary(
+                          text: 'Challenge!',
+                          onPressed: () {},
+                        ),
+                      ),
+                      const SizedBox(width: AppMargins.smallMargin),
+                      Flexible(
+                        child: CustomButton.outlined(
+                          text: 'Friends',
+                          onPressed: () {},
+                          leadingIcon: const Icon(
+                            Icons.check,
+                            color: AppColors.primary,
+                          ),
+                        ),
+                      )
+                    ],
                   )
-                ],
-              )
-            else
-              CustomButton.primary(
-                text: 'Send friend request',
-                onPressed: () {},
-              )
-          ],
-        ),
-      ),
+                else
+                  BlocProvider(
+                    create: (context) => FriendRequestBloc(
+                      context.read<AuthBloc>().state.publicUserData.id,
+                      userPublicData.id,
+                    ),
+                    child: BlocBuilder<FriendRequestBloc, FriendRequestState>(
+                      builder: (context, state) {
+                        if (state.isLoading) {
+                          return const CircularProgressIndicator();
+                        } else if (state.isFriendRequestSent) {
+                          return CustomButton.primary(
+                            text: 'Cancel friend request',
+                            onPressed: () => context
+                                .read<FriendRequestBloc>()
+                                .add(CancelFriendRequestPressed()),
+                          );
+                        } else {
+                          return CustomButton.primary(
+                            text: 'Send friend request',
+                            onPressed: () => context
+                                .read<FriendRequestBloc>()
+                                .add(SendFriendRequestPressed()),
+                          );
+                        }
+                      },
+                    ),
+                  )
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 

@@ -10,6 +10,7 @@ class CustomButton extends StatelessWidget {
     this.width = double.infinity,
     this.borderColor,
     this.leadingIcon,
+    this.height = 50,
     super.key,
   });
 
@@ -21,6 +22,7 @@ class CustomButton extends StatelessWidget {
     this.width = double.infinity,
     this.borderColor,
     this.leadingIcon,
+    this.height,
     super.key,
   });
 
@@ -32,6 +34,7 @@ class CustomButton extends StatelessWidget {
     this.width = double.infinity,
     this.borderColor = AppColors.greyLight,
     this.leadingIcon,
+    this.height,
     super.key,
   });
 
@@ -41,12 +44,14 @@ class CustomButton extends StatelessWidget {
   final Color? borderColor;
   final void Function()? onPressed;
   final double? width;
+  final double? height;
   final Widget? leadingIcon;
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       width: width,
+      height: height,
       child: ElevatedButton(
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
@@ -57,7 +62,10 @@ class CustomButton extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             if (leadingIcon != null) ...[
-              SizedBox(height: 24, child: leadingIcon,),
+              SizedBox(
+                height: 24,
+                child: leadingIcon,
+              ),
               const SizedBox(
                 width: 8,
               ),

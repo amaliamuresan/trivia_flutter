@@ -56,7 +56,7 @@ class FirestoreUserPrivateRepository {
     }
   }
 
-  Future<void> removeReceivedFriendRequest(
+  Future<void> deleteReceivedFriendRequest(
       String senderId, String receiverId) async {
     try {
       await _deleteReceivedFriendRequest(senderId, receiverId);
@@ -65,14 +65,14 @@ class FirestoreUserPrivateRepository {
       await _deleteSentRequest(senderId, receiverId);
     } catch (e) {
       if (kDebugMode) {
-        print('removeReceivedRequest $e');
+        print('denyReceivedRequest $e');
       }
     }
   }
 
   Future<void> acceptFriendRequest(String senderId, String receiverId) async {
     try {
-      await removeReceivedFriendRequest(senderId, receiverId);
+      await deleteReceivedFriendRequest(senderId, receiverId);
 
       // TODO: to be moved to cloud functions
       await _deleteSentRequest(senderId, receiverId);
@@ -127,9 +127,9 @@ class FirestoreUserPrivateRepository {
   // TODO: to be moved into cloud functions
   Future<void> _deleteReceivedFriendRequest(
       String senderId, String receiverId) async {
-    final senderDoc = await _collectionReference.doc(senderId).get();
-    if (senderDoc.exists) {
-      await _collectionReference.doc(senderId).update({
+    final receiverDoc = await _collectionReference.doc(receiverId).get();
+    if (receiverDoc.exists) {
+      await _collectionReference.doc(receiverId).update({
         'receivedFriendRequests': FieldValue.arrayRemove([senderId])
       });
     }

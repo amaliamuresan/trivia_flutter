@@ -1,68 +1,78 @@
-import 'package:trivia_app/src/features/quiz_menu/domain/quiz_question.dart';
+import 'package:trivia_app/src/features/quiz_menu/domain/quiz_match_question.dart';
 
 class QuizSession {
   QuizSession({
     required this.challengerId,
     required this.otherPlayerId,
-    required this.isMatchFinished,
-    required this.questions,
+    required this.matchDone,
+    this.currentQuestion,
+    // required this.questions,
     required this.currentQuestionIndex,
-    required this.challengerRightAnswers,
-    required this.otherPLayerRightAnswers,
-    required this.challengerCurrentResponse,
-    required this.otherPlayerCurrentResponse,
+    required this.challengerCorrectAnswers,
+    required this.otherPlayerCorrectAnswers,
+    required this.challengerAnswer,
+    required this.otherPlayerAnswer,
     required this.challengerConnected,
     required this.otherPlayerConnected,
     required this.category,
+    required this.categoryId,
   });
 
   factory QuizSession.fromMap(Map<String, dynamic> map) {
     return QuizSession(
       challengerId: map['challengerId'] as String,
       category: map['category'] as String,
+      categoryId: map['categoryId'] as int,
       otherPlayerId: map['otherPlayerId'] as String,
-      isMatchFinished: map['isMatchFinished'] as bool,
-      questions: QuizQuestion.fromList(map['questions'] as List),
+      matchDone: map['matchDone'] as bool?,
+      // questions: QuizQuestion.fromList(map['questions'] as List),
       currentQuestionIndex: map['currentQuestionIndex'] as int,
-      challengerRightAnswers: map['challengerRightAnswers'] as int,
-      otherPLayerRightAnswers: map['otherPLayerRightAnswers'] as int,
-      challengerCurrentResponse: map['challengerCurrentResponse'] as bool?,
-      otherPlayerCurrentResponse: map['otherPlayerCurrentResponse'] as bool?,
+      currentQuestion: map['current_question'] != null
+          ? QuizMatchQuestion.fromMap(map['current_question'] as Map<String, dynamic>)
+          : null,
+      challengerCorrectAnswers: map['challengerCorrectAnswers'] as int,
+      otherPlayerCorrectAnswers: map['otherPlayerCorrectAnswers'] as int,
+      challengerAnswer: map['challengerAnswer'] as String?,
+      otherPlayerAnswer: map['otherPlayerAnswer'] as String?,
       challengerConnected: map['challengerConnected'] as bool,
       otherPlayerConnected: map['otherPlayerConnected'] as bool,
     );
   }
 
   String category;
+  int categoryId;
 
   bool challengerConnected;
   bool otherPlayerConnected;
 
   String challengerId;
   String otherPlayerId;
-  bool isMatchFinished;
+  bool? matchDone;
 
-  List<QuizQuestion> questions;
+  // List<QuizQuestion> questions;
+  QuizMatchQuestion? currentQuestion;
   int currentQuestionIndex;
 
-  int challengerRightAnswers;
-  int otherPLayerRightAnswers;
+  int challengerCorrectAnswers;
+  int otherPlayerCorrectAnswers;
 
-  bool? challengerCurrentResponse;
-  bool? otherPlayerCurrentResponse;
+  String? challengerAnswer;
+  String? otherPlayerAnswer;
 
   Map<String, dynamic> toMap() {
     return {
       'challengerId': challengerId,
       'category': category,
+      'categoryId': categoryId,
       'otherPlayerId': otherPlayerId,
-      'isMatchFinished': isMatchFinished,
-      'questions': questions.map((e) => e.toMap()).toList(),
+      'matchDone': matchDone,
+      'currentQuestion': currentQuestion,
+      // 'questions': questions.map((e) => e.toMap()).toList(),
       'currentQuestionIndex': currentQuestionIndex,
-      'challengerRightAnswers': challengerRightAnswers,
-      'otherPLayerRightAnswers': otherPLayerRightAnswers,
-      'challengerCurrentResponse': challengerCurrentResponse,
-      'otherPlayerCurrentResponse': otherPlayerCurrentResponse,
+      'challengerCorrectAnswers': challengerCorrectAnswers,
+      'otherPlayerCorrectAnswers': otherPlayerCorrectAnswers,
+      'challengerAnswer': challengerAnswer,
+      'otherPlayerAnswer': otherPlayerAnswer,
       'challengerConnected': challengerConnected,
       'otherPlayerConnected': otherPlayerConnected,
     };

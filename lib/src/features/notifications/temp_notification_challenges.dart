@@ -26,6 +26,7 @@ class _TempNotificationChallengesState extends State<TempNotificationChallenges>
   @override
   void initState() {
     super.initState();
+    print('init notif state');
     final connectedUserId = BlocProvider.of<AuthBloc>(context).state.authUserData.id;
     matchesSubscription = _quizSessionRepository.matchesCollection
         .where('otherPlayerId', isEqualTo: connectedUserId)

@@ -13,7 +13,7 @@ class FirestoreUserPublicData extends Equatable {
   FirestoreUserPublicData.fromJson(Map<String, dynamic> json, this.id)
       : photoUrl = json['photoUrl'] as String?,
         displayName = json['displayName'] as String,
-        friendsUids = json['friendsUids'] as List<String>?,
+        friendsUids = (json['friendsUids'] as List?)?.map((e) => e as String).toList(),
         nrOfMatchesWon = json['nrOfMatchesWon'] as int?,
         nrOfMatchesPlayed = json['nrOfMatchesPlayed'] as int?;
 

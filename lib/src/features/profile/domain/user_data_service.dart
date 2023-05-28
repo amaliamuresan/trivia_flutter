@@ -1,7 +1,7 @@
+import 'package:flutter/foundation.dart';
 import 'package:trivia_app/src/features/profile/data/firestore_user_private_repository.dart';
 import 'package:trivia_app/src/features/profile/data/firestore_user_public_repository.dart';
-
-import 'firestore_user_public_data.dart';
+import 'package:trivia_app/src/features/profile/domain/firestore_user_public_data.dart';
 
 class UserDataService {
   factory UserDataService() => _singleton;
@@ -23,5 +23,28 @@ class UserDataService {
       return userPublicData;
     }
     return null;
+  }
+
+  Future<void> acceptFriendRequest(String senderId, String receiverId) async {
+    try {
+        await _publicDataRepository.addFriend(senderId, receiverId);
+
+        // TODO: should be moved to cloud functions ?
+        await _privateDataRepository.deleteReceivedFriendRequest(senderId, receiverId);
+    } catch(e) {
+      if (kDebugMode) {
+        print('addFriend $e');
+      }
+    }
+  }
+
+  Future<void> denyFriendRequest(String senderId, String receiverId) async {
+    try {
+      await _privateDataRepository.deleteReceivedFriendRequest(senderId, receiverId);
+    } catch(e) {
+      if (kDebugMode) {
+        print('addFriend $e');
+      }
+    }
   }
 }

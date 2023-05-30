@@ -13,6 +13,7 @@ import 'package:trivia_app/src/features/quiz_match/presentation/screens/quiz_pag
 import 'package:trivia_app/src/features/quiz_menu/data/open_trivia_repository.dart';
 import 'package:trivia_app/src/features/quiz_menu/domain/quiz_category.dart';
 import 'package:trivia_app/src/features/search/presentation/pages/search_page.dart';
+import 'package:trivia_app/src/features/single_game/presentation/pages/single_game_page.dart';
 
 part 'route_names.dart';
 
@@ -108,6 +109,14 @@ class AppRoutes {
             matchId: state.queryParams['matchId']!,
             isChallenger: state.queryParams['isChallenger']! == 'true',
           ));
+        },
+      ),
+      GoRoute(
+        path: RouteLocations.singleGame,
+        name: RouteNames.singleGame,
+        builder: (BuildContext context, GoRouterState state) {
+          final category = state.extra! as QuizCategory;
+          return SingleGamePage(quizCategory: category);
         },
       ),
     ],

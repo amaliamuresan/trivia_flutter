@@ -9,8 +9,7 @@ class FirestoreUserPublicRepository {
 
   FirestoreUserPublicRepository._internal() : super();
 
-  static final FirestoreUserPublicRepository _singleton =
-      FirestoreUserPublicRepository._internal();
+  static final FirestoreUserPublicRepository _singleton = FirestoreUserPublicRepository._internal();
 
   final CollectionReference<Map<String, dynamic>> _collectionReference =
       FirebaseFirestore.instance.collection('userPublicData');
@@ -21,6 +20,26 @@ class FirestoreUserPublicRepository {
     } catch (e) {
       if (kDebugMode) {
         print('addData $e');
+      }
+    }
+  }
+
+  Future<List<FirestoreUserPublicData>> getUserFriendsById(String userId) async {
+    final snapshot = await _collectionReference.doc(userId).get();
+    final body = snapshot.data()!;
+    final userPublicData = FirestoreUserPublicData.fromJson(body, userId);
+    if (userPublicData.friendsUids == null || userPublicData.friendsUids!.isEmpty) {
+      return [];
+    } else {
+      try {
+        final friends = await getUsersPublicDataByIds(userPublicData.friendsUids!);
+        return friends ?? [];
+      } catch (err, stackTrace) {
+        if (kDebugMode) {
+          print(err);
+          print(stackTrace);
+        }
+        return [];
       }
     }
   }
@@ -49,8 +68,7 @@ class FirestoreUserPublicRepository {
     return FirestoreUserPublicData.fromJson(body, userId);
   }
 
-  Future<List<FirestoreUserPublicData>?> getUserByDisplayName(
-      String displayName) async {
+  Future<List<FirestoreUserPublicData>?> getUserByDisplayName(String displayName) async {
     try {
       final QuerySnapshot data = await _collectionReference
           .where('displayName', isGreaterThanOrEqualTo: displayName)

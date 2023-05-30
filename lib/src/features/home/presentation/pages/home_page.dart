@@ -52,7 +52,8 @@ class _HomePageState extends State<HomePage> {
         ),
         const SizedBox(height: AppMargins.smallMargin),
         BlocBuilder<AuthBloc, AuthState>(
-          buildWhen: (previous, current) => previous.publicUserData != current.publicUserData,
+          buildWhen: (previous, current) =>
+              previous.publicUserData != current.publicUserData,
           builder: (context, state) {
             return AvatarTileWidget(
               username: state.publicUserData.displayName ?? '',
@@ -70,8 +71,12 @@ class _HomePageState extends State<HomePage> {
             );
           },
         ),
+        const SizedBox(height: AppMargins.regularMargin),
         if (isLoading)
-          const CircularProgressIndicator()
+          const Center(
+              child: CircularProgressIndicator(
+            color: AppColors.accentColor,
+          ))
         else
           Expanded(
             child: GridView.builder(
@@ -88,7 +93,8 @@ class _HomePageState extends State<HomePage> {
                   // height: 800,
                   child: CategoryItem(
                     onTap: () {
-                      context.pushNamed(RouteNames.quizPage, extra: quizCategories[index]);
+                      context.pushNamed(RouteNames.quizPage,
+                          extra: quizCategories[index]);
                     },
                     categoryTitle: quizCategories[index].name,
                   ),

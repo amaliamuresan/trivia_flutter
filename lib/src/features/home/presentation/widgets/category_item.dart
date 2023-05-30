@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:trivia_app/src/features/home/helpers/category_image_selector_helper.dart';
+import 'package:trivia_app/src/style/colors.dart';
 
 class CategoryItem extends StatelessWidget {
   const CategoryItem({
@@ -12,7 +14,9 @@ class CategoryItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final cleanTitle = categoryTitle.contains(': ') ? categoryTitle.split(': ').last : categoryTitle;
+    final cleanTitle = categoryTitle.contains(': ')
+        ? categoryTitle.split(': ').last
+        : categoryTitle;
     return GestureDetector(
       onTap: onTap,
       child: Column(
@@ -21,9 +25,19 @@ class CategoryItem extends StatelessWidget {
             height: 52,
             width: 52,
             decoration: const BoxDecoration(
-              color: Colors.red,
+              color: AppColors.primary,
               borderRadius: BorderRadius.all(
                 Radius.circular(16),
+              ),
+            ),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(12),
+              child: Image.network(
+                CategoryImageSelectorHelper.getImageForCategory(
+                      categoryTitle,
+                    ) ??
+                    '',
+                fit: BoxFit.cover,
               ),
             ),
           ),

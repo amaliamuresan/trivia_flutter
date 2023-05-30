@@ -24,6 +24,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<UserLoggedIn>(_onUserLoggedIn);
     on<LogInWithEmailAndPass>(_onLogInWithEmailAndPass);
     on<RegisterWithEmailAndPass>(_onRegisterWithEmailAndPass);
+    on<LoginWithGoogle>(_onLoginWithGoogle);
+    on<RegisterWithGoogle>(_onRegisterWithGoogle);
     on<LogOut>(_onLogOut);
 
     /// Start authentication data stream listener. If user logs in or logs out, the app is going to register this event.
@@ -105,5 +107,17 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     if (event.publicUserData.isNotEmpty) {
       emit(state.copyWith(publicUserData: event.publicUserData));
     }
+  }
+
+  Future<FutureOr<void>> _onLoginWithGoogle(
+      LoginWithGoogle event, Emitter<AuthState> emit) async {
+    final userData = await _authRepository.authenticateWithGoogle();
+    emit(state.copyWith(authUserData: userData));
+  }
+
+  Future<FutureOr<void>> _onRegisterWithGoogle(
+      RegisterWithGoogle event, Emitter<AuthState> emit) async {
+    final userData = await _authService.registerWithGoogle();
+    emit(state.copyWith(authUserData: userData));
   }
 }

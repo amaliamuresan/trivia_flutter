@@ -1,5 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import 'package:flutter/foundation.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:trivia_app/src/features/authentication/domain/models/auth_user_data.dart';
 
 class AuthRepository {
@@ -36,6 +38,19 @@ class AuthRepository {
       }
     }
     return null;
+  }
+
+  Future<AuthUserData?> authenticateWithGoogle() async {
+    final googleSignIn = GoogleSignIn.standard();
+    final googleUser = await googleSignIn.signIn();
+    final googleAuth = await googleUser!.authentication;
+    final credential = firebase_auth.GoogleAuthProvider.credential(
+      accessToken: googleAuth.accessToken,
+      idToken: googleAuth.idToken,
+    );
+
+    final userCredential = await _authInstance.signInWithCredential(credential);
+    return userCredential.user?.toUser;
   }
 
   Future<AuthUserData?> loginWithEmailAndPassword({
@@ -89,6 +104,10 @@ class AuthRepository {
 extension on User {
   AuthUserData get toUser {
     return AuthUserData(
-        id: uid, email: email, displayName: displayName, photo: photoURL);
+      id: uid,
+      email: email,
+      displayName: displayName,
+      photo: photoURL,
+    );
   }
 }

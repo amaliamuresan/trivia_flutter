@@ -11,16 +11,39 @@ class AuthService {
   static final AuthService _singleton = AuthService._internal();
 
   final AuthRepository _authRepository = AuthRepository();
-  final FirestoreUserPublicRepository _userPublicRepository = FirestoreUserPublicRepository();
+  final FirestoreUserPublicRepository _userPublicRepository =
+      FirestoreUserPublicRepository();
 
-  Future<AuthUserData?> registerWithEmailAndPassword({required String emailAddress, required String password, required String displayName}) async {
+  Future<AuthUserData?> registerWithEmailAndPassword(
+      {required String emailAddress,
+      required String password,
+      required String displayName}) async {
     try {
-      final userData = await _authRepository.registerWithEmailAndPassword(emailAddress: emailAddress, password: password);
-      if(userData != null) {
-        await _userPublicRepository.addData(FirestoreUserPublicData(id: userData.id, displayName: displayName));
-      return userData;
+      final userData = await _authRepository.registerWithEmailAndPassword(
+          emailAddress: emailAddress, password: password);
+      if (userData != null) {
+        await _userPublicRepository.addData(
+            FirestoreUserPublicData(id: userData.id, displayName: displayName));
+        return userData;
       }
-    } catch(_) {
+    } catch (_) {
+      rethrow;
+    }
+    return null;
+  }
+
+  Future<AuthUserData?> registerWithGoogle() async {
+    try {
+      final userData = await _authRepository.authenticateWithGoogle();
+      if (userData != null) {
+        await _userPublicRepository.addData(FirestoreUserPublicData(
+          id: userData.id,
+          displayName: userData.displayName,
+          photoUrl: userData.photo,
+        ));
+        return userData;
+      }
+    } catch (_) {
       rethrow;
     }
     return null;

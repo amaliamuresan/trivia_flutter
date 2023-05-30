@@ -10,6 +10,8 @@ import 'package:trivia_app/src/style/margins.dart';
 import 'package:trivia_app/src/style/theme.dart';
 import 'package:trivia_app/src/widgets/buttons/custom_button.dart';
 
+import '../validators/auth_field_validator.dart';
+
 class LoginScreen extends StatefulWidget {
   const LoginScreen({
     required this.redirectLocation,
@@ -43,21 +45,28 @@ class _LoginScreenState extends State<LoginScreen> {
               const Spacer(),
               Row(
                 children: [
-                  Text('Welcome back', style: AppTheme.theme.textTheme.headlineLarge),
+                  Text('Welcome back',
+                      style: AppTheme.theme.textTheme.headlineLarge),
                   Text(
                     '!',
-                    style: AppTheme.theme.textTheme.headlineLarge?.copyWith(color: AppColors.primary),
+                    style: AppTheme.theme.textTheme.headlineLarge
+                        ?.copyWith(color: AppColors.primary),
                   )
                 ],
               ),
               const SizedBox(height: 24),
               TextFormField(
+                validator: AuthFieldsValidator.validateEmail,
+                autovalidateMode: AutovalidateMode.onUserInteraction,
                 decoration: const InputDecoration(labelText: 'E-mail'),
                 controller: emailController,
               ),
               const SizedBox(height: 18),
               TextFormField(
+                obscureText: true,
                 controller: passwordController,
+                validator: AuthFieldsValidator.validatePassword,
+                autovalidateMode: AutovalidateMode.onUserInteraction,
                 decoration: const InputDecoration(
                   labelText: 'Password',
                 ),
@@ -77,8 +86,11 @@ class _LoginScreenState extends State<LoginScreen> {
               const SizedBox(height: 24),
               const AuthenticationDivider(),
               const SizedBox(height: 24),
-              CustomButton.outlined(
-                onPressed: () {},
+              CustomButton(
+                textColor: Colors.black87,
+                backgroundColor: Colors.white,
+                onPressed: () =>
+                    BlocProvider.of<AuthBloc>(context).add(LoginWithGoogle()),
                 text: 'Login with Google',
                 leadingIcon: Image.asset(AssetsPaths.googleIcon),
               ),

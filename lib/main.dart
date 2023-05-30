@@ -12,7 +12,8 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
 
-  if (kDebugMode) {
+  /// delete false if you use an emulator locally
+  if (kDebugMode && false) {
     try {
       FirebaseFirestore.instance.useFirestoreEmulator('10.0.2.2', 8080);
       await FirebaseAuth.instance.useAuthEmulator('10.0.2.2', 9099);

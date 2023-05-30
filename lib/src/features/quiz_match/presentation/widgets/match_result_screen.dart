@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lottie/lottie.dart';
+import 'package:trivia_app/src/features/authentication/presentation/blocs/auth_bloc/auth_bloc.dart';
+import 'package:trivia_app/src/features/profile/presentation/widgets/avatar_widget.dart';
 import 'package:trivia_app/src/features/quiz_match/presentation/widgets/match_result_message.dart';
 
 class MatchResultScreen extends StatelessWidget {
@@ -29,6 +33,10 @@ class MatchResultScreen extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
+          if (isWinner) Lottie.asset('assets/animations/confetti.json'),
+          AvatarWidget(
+            photoUrl: context.read<AuthBloc>().state.publicUserData.photoUrl,
+          ),
           MatchResultMessage(
             isWinner: isWinner,
             isDraw: isDraw,

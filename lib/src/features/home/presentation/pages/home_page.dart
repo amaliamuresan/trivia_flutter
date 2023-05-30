@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:trivia_app/src/features/authentication/presentation/blocs/auth_bloc/auth_bloc.dart';
 import 'package:trivia_app/src/features/home/presentation/widgets/avatar_tile_widget.dart';
+import 'package:trivia_app/src/features/home/presentation/widgets/category_dialog.dart';
 import 'package:trivia_app/src/features/home/presentation/widgets/category_item.dart';
 import 'package:trivia_app/src/features/profile/presentation/widgets/logged_user_profile_widget.dart';
 import 'package:trivia_app/src/features/quiz_menu/data/open_trivia_repository.dart';
@@ -93,8 +94,12 @@ class _HomePageState extends State<HomePage> {
                   // height: 800,
                   child: CategoryItem(
                     onTap: () {
-                      context.pushNamed(RouteNames.quizPage,
-                          extra: quizCategories[index]);
+                      CategoryDialog.showCategoryDialog(
+                        context,
+                        quizCategories[index],
+                      );
+                      // context.pushNamed(RouteNames.quizPage,
+                      //     extra: quizCategories[index]);
                     },
                     categoryTitle: quizCategories[index].name,
                   ),

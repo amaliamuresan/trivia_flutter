@@ -43,10 +43,12 @@ class _LoginScreenState extends State<LoginScreen> {
               const Spacer(),
               Row(
                 children: [
-                  Text('Welcome back', style: AppTheme.theme.textTheme.headlineLarge),
+                  Text('Welcome back',
+                      style: AppTheme.theme.textTheme.headlineLarge),
                   Text(
                     '!',
-                    style: AppTheme.theme.textTheme.headlineLarge?.copyWith(color: AppColors.primary),
+                    style: AppTheme.theme.textTheme.headlineLarge
+                        ?.copyWith(color: AppColors.primary),
                   )
                 ],
               ),
@@ -77,8 +79,11 @@ class _LoginScreenState extends State<LoginScreen> {
               const SizedBox(height: 24),
               const AuthenticationDivider(),
               const SizedBox(height: 24),
-              CustomButton.outlined(
-                onPressed: () {},
+              CustomButton(
+                textColor: Colors.black87,
+                backgroundColor: Colors.white,
+                onPressed: () =>
+                    BlocProvider.of<AuthBloc>(context).add(LoginWithGoogle()),
                 text: 'Login with Google',
                 leadingIcon: Image.asset(AssetsPaths.googleIcon),
               ),

@@ -45,7 +45,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   Text('Sign', style: AppTheme.theme.textTheme.headlineLarge),
                   Text(
                     ' Up',
-                    style: AppTheme.theme.textTheme.headlineLarge?.copyWith(color: AppColors.primary),
+                    style: AppTheme.theme.textTheme.headlineLarge
+                        ?.copyWith(color: AppColors.primary),
                   )
                 ],
               ),
@@ -85,8 +86,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
               const SizedBox(height: 24),
               const AuthenticationDivider(),
               const SizedBox(height: 24),
-              CustomButton.outlined(
-                onPressed: () {},
+              CustomButton(
+                textColor: Colors.black87,
+                backgroundColor: Colors.white,
+                onPressed: () => BlocProvider.of<AuthBloc>(context)
+                    .add(RegisterWithGoogle()),
                 text: 'Sign Up with Google',
                 leadingIcon: Image.asset(AssetsPaths.googleIcon),
               ),

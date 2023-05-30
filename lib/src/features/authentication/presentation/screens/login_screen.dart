@@ -10,6 +10,8 @@ import 'package:trivia_app/src/style/margins.dart';
 import 'package:trivia_app/src/style/theme.dart';
 import 'package:trivia_app/src/widgets/buttons/custom_button.dart';
 
+import '../validators/auth_field_validator.dart';
+
 class LoginScreen extends StatefulWidget {
   const LoginScreen({
     required this.redirectLocation,
@@ -54,12 +56,17 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               const SizedBox(height: 24),
               TextFormField(
+                validator: AuthFieldsValidator.validateEmail,
+                autovalidateMode: AutovalidateMode.onUserInteraction,
                 decoration: const InputDecoration(labelText: 'E-mail'),
                 controller: emailController,
               ),
               const SizedBox(height: 18),
               TextFormField(
+                obscureText: true,
                 controller: passwordController,
+                validator: AuthFieldsValidator.validatePassword,
+                autovalidateMode: AutovalidateMode.onUserInteraction,
                 decoration: const InputDecoration(
                   labelText: 'Password',
                 ),

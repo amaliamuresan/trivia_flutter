@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:trivia_app/src/constants/assets_paths.dart';
 import 'package:trivia_app/src/features/authentication/presentation/blocs/auth_bloc/auth_bloc.dart';
+import 'package:trivia_app/src/features/authentication/presentation/validators/auth_field_validator.dart';
 import 'package:trivia_app/src/features/authentication/presentation/widgets/authentication_divider.dart';
 import 'package:trivia_app/src/routes/routes.dart';
 import 'package:trivia_app/src/style/colors.dart';
@@ -53,10 +54,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
               const SizedBox(height: 24),
               TextFormField(
                 controller: emailController,
+                validator: AuthFieldsValidator.validateEmail,
+                autovalidateMode: AutovalidateMode.onUserInteraction,
                 decoration: const InputDecoration(labelText: 'E-mail'),
               ),
               const SizedBox(height: 18),
               TextFormField(
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+                validator: AuthFieldsValidator.validateName,
                 controller: displayNameController,
                 decoration: const InputDecoration(
                   labelText: 'Display Name',
@@ -64,8 +69,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
               ),
               const SizedBox(height: 18),
               TextFormField(
+                obscureText: true,
                 controller: passwordController,
-                validator: validatePassword,
+                validator: AuthFieldsValidator.validatePassword,
+                autovalidateMode: AutovalidateMode.onUserInteraction,
                 decoration: const InputDecoration(
                   labelText: 'Password',
                 ),
@@ -120,14 +127,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
         ),
       ),
     );
-  }
-
-  String? validatePassword(String? value) {
-    if (value == null || value.length < 6) {
-      return 'Password is invalid';
-    } else {
-      return null;
-    }
   }
 
   @override

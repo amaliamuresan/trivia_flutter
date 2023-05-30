@@ -11,6 +11,7 @@ class RouteNames {
   static const String search = 'search';
   static const String quizPage = 'quiz_page';
   static const String quizMatch = 'quiz_match';
+  static const String singleGame = 'single_game';
 }
 
 class RouteLocations {
@@ -24,4 +25,5 @@ class RouteLocations {
   static const String search = '/search';
   static const String quizPage = '/quiz_page';
   static const String quizMatch = '/quiz_match';
+  static const String singleGame = '/single_game';
 }

@@ -29,9 +29,10 @@ class GameResultsWidget extends StatelessWidget {
               'Congratulations!',
               textAlign: TextAlign.center,
               style: TextStyle(
-                  color: AppColors.primary,
-                  fontWeight: FontWeight.w600,
-                  fontSize: 28),
+                color: AppColors.primary,
+                fontWeight: FontWeight.w600,
+                fontSize: 28,
+              ),
             ),
             const SizedBox(height: AppMargins.regularMargin),
             Text(

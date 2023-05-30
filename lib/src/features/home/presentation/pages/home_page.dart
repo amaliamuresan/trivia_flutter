@@ -43,71 +43,74 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        GestureDetector(
-          onTap: () => context.pushNamed(RouteNames.search),
-          child: const CustomSearchField(
-            isEnabled: false,
-          ),
-        ),
-        const SizedBox(height: AppMargins.smallMargin),
-        BlocBuilder<AuthBloc, AuthState>(
-          buildWhen: (previous, current) =>
-              previous.publicUserData != current.publicUserData,
-          builder: (context, state) {
-            return AvatarTileWidget(
-              username: state.publicUserData.displayName ?? '',
-              avatarUrl: state.publicUserData.photoUrl,
-              onTap: () {
-                showModalBottomSheet<Widget>(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return LoggedUserProfileWidget(
-                      userData: state.publicUserData,
-                    );
-                  },
-                );
-              },
-            );
-          },
-        ),
-        const SizedBox(height: AppMargins.regularMargin),
-        if (isLoading)
-          const Center(
-              child: CircularProgressIndicator(
-            color: AppColors.accentColor,
-          ))
-        else
-          Expanded(
-            child: GridView.builder(
-              shrinkWrap: true,
-              gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-                maxCrossAxisExtent: 100,
-                childAspectRatio: 0.8,
-                crossAxisSpacing: 10,
-                mainAxisSpacing: 10,
-              ),
-              itemCount: quizCategories.length,
-              itemBuilder: (context, index) {
-                return SizedBox(
-                  // height: 800,
-                  child: CategoryItem(
-                    onTap: () {
-                      CategoryDialog.showCategoryDialog(
-                        context,
-                        quizCategories[index],
-                      );
-                      // context.pushNamed(RouteNames.quizPage,
-                      //     extra: quizCategories[index]);
-                    },
-                    categoryTitle: quizCategories[index].name,
-                  ),
-                );
-              },
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Column(
+        children: [
+          GestureDetector(
+            onTap: () => context.pushNamed(RouteNames.search),
+            child: const CustomSearchField(
+              isEnabled: false,
             ),
-          )
-      ],
+          ),
+          const SizedBox(height: AppMargins.smallMargin),
+          BlocBuilder<AuthBloc, AuthState>(
+            buildWhen: (previous, current) =>
+                previous.publicUserData != current.publicUserData,
+            builder: (context, state) {
+              return AvatarTileWidget(
+                username: state.publicUserData.displayName ?? '',
+                avatarUrl: state.publicUserData.photoUrl,
+                onTap: () {
+                  showModalBottomSheet<Widget>(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return LoggedUserProfileWidget(
+                        userData: state.publicUserData,
+                      );
+                    },
+                  );
+                },
+              );
+            },
+          ),
+          const SizedBox(height: AppMargins.regularMargin),
+          if (isLoading)
+            const Center(
+                child: CircularProgressIndicator(
+              color: AppColors.accentColor,
+            ))
+          else
+            Expanded(
+              child: GridView.builder(
+                shrinkWrap: true,
+                gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                  maxCrossAxisExtent: 100,
+                  childAspectRatio: 0.8,
+                  crossAxisSpacing: 10,
+                  mainAxisSpacing: 10,
+                ),
+                itemCount: quizCategories.length,
+                itemBuilder: (context, index) {
+                  return SizedBox(
+                    // height: 800,
+                    child: CategoryItem(
+                      onTap: () {
+                        CategoryDialog.showCategoryDialog(
+                          context,
+                          quizCategories[index],
+                        );
+                        // context.pushNamed(RouteNames.quizPage,
+                        //     extra: quizCategories[index]);
+                      },
+                      categoryTitle: quizCategories[index].name,
+                    ),
+                  );
+                },
+              ),
+            )
+        ],
+      ),
     );
   }
 }

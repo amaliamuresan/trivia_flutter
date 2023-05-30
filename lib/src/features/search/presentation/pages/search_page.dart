@@ -14,7 +14,7 @@ class SearchPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(toolbarHeight: 0),
       body: Padding(
-        padding: const EdgeInsets.all(0),
+        padding: const EdgeInsets.all(8),
         child: BlocProvider<SearchBloc>(
           create: (context) => SearchBloc(),
           child: BlocBuilder<SearchBloc, SearchState>(

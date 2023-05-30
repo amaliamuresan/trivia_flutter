@@ -67,6 +67,10 @@ class FirestoreUserPublicRepository {
     return null;
   }
 
+  Future<void> updateProfilePictureUrl(String uid, String photoUrl) async {
+    await _collectionReference.doc(uid).update({'photoUrl': photoUrl});
+  }
+
   Future<void> addFriend(String uid1, String uid2) async {
     try {
       await _collectionReference.doc(uid1).update({

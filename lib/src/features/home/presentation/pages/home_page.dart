@@ -71,8 +71,12 @@ class _HomePageState extends State<HomePage> {
             );
           },
         ),
+        const SizedBox(height: AppMargins.regularMargin),
         if (isLoading)
-          const CircularProgressIndicator()
+          const Center(
+              child: CircularProgressIndicator(
+            color: AppColors.accentColor,
+          ))
         else
           Expanded(
             child: GridView.builder(

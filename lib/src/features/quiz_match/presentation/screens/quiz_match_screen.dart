@@ -5,12 +5,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:html/parser.dart';
+import 'package:trivia_app/src/extensions/string_extensions.dart';
 import 'package:trivia_app/src/features/authentication/domain/models/auth_user_data.dart';
 import 'package:trivia_app/src/features/authentication/presentation/blocs/auth_bloc/auth_bloc.dart';
 import 'package:trivia_app/src/features/quiz_match/data/quiz_session_repository.dart';
 import 'package:trivia_app/src/features/quiz_match/domain/quiz_session.dart';
 import 'package:trivia_app/src/features/quiz_match/presentation/widgets/match_result_screen.dart';
 import 'package:trivia_app/src/routes/routes.dart';
+import 'package:trivia_app/src/style/style.dart';
 
 class QuizMatchScreen extends StatefulWidget {
   const QuizMatchScreen({
@@ -27,12 +29,15 @@ class QuizMatchScreen extends StatefulWidget {
 }
 
 class _QuizMatchScreenState extends State<QuizMatchScreen> {
+  static const int questionTimeSeconds = 15;
   late bool isLoading;
   late QuizSession session;
   late AuthUserData currentUser;
   late final StreamSubscription<DocumentSnapshot<Object?>> matchSubscription;
   String? selectedAnswer;
   bool showRoundResults = false;
+  Timer? timer;
+  int remainingTimeSeconds = questionTimeSeconds;
 
   @override
   void initState() {
@@ -54,17 +59,26 @@ class _QuizMatchScreenState extends State<QuizMatchScreen> {
         if (event.data() != null) {
           final sessionData = event.data() as Map<String, dynamic>;
           final newSession = QuizSession.fromMap(sessionData);
-
+          if (newSession.otherPlayerConnected &&
+              newSession.challengerConnected &&
+              newSession.currentQuestionIndex == 0 &&
+              newSession.otherPlayerAnswer == null &&
+              newSession.challengerAnswer == null) {
+            startTimer();
+          }
           try {
             if (newSession.currentQuestionIndex != session.currentQuestionIndex) {
               setState(() {
                 showRoundResults = true;
               });
               await Future<dynamic>.delayed(const Duration(seconds: 2));
+              startTimer();
               selectedAnswer = null;
             }
           } catch (_) {
             print(_);
+
+            /// session is null
           }
 
           setState(() {
@@ -77,9 +91,30 @@ class _QuizMatchScreenState extends State<QuizMatchScreen> {
     });
   }
 
+  void startTimer() {
+    print('timer start');
+    timer?.cancel();
+    remainingTimeSeconds = questionTimeSeconds;
+    timer = Timer.periodic(const Duration(seconds: 1), (timer) async {
+      if (remainingTimeSeconds == 0) {
+        timer.cancel();
+        if (selectedAnswer == null) {
+          await QuizSessionRepository().answerQuestion(
+            isChallenger: widget.isChallenger,
+            matchId: widget.matchId,
+            answer: '-',
+          );
+        }
+      } else {
+        setState(() => remainingTimeSeconds--);
+      }
+    });
+  }
+
   @override
   void dispose() {
     matchSubscription.cancel();
+    timer?.cancel();
     super.dispose();
   }
 
@@ -115,73 +150,145 @@ class _QuizMatchScreenState extends State<QuizMatchScreen> {
       );
     }
 
+    final progressBarWidth = MediaQuery.of(context).size.width / 1.1;
+
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Row(),
+        const SizedBox(height: AppMargins.regularMargin),
+        const SizedBox(
+          height: 50,
+        ),
+        Stack(
+          children: [
+            Container(
+              height: 8,
+              width: progressBarWidth,
+              decoration: BoxDecoration(
+                color: AppColors.surface,
+                borderRadius: BorderRadius.circular(25),
+              ),
+            ),
+            Container(
+              height: 8,
+              width: remainingTimeSeconds * progressBarWidth / questionTimeSeconds,
+              decoration: BoxDecoration(
+                color: AppColors.accentColor,
+                borderRadius: BorderRadius.circular(25),
+              ),
+            ),
+          ],
+        ),
         Text(
           session.category,
           style: const TextStyle(color: Colors.white),
         ),
-        const SizedBox(
-          height: 20,
-        ),
+        const SizedBox(height: AppMargins.bigMargin),
         Text(
-          _convertHtmlText(session.currentQuestion!.question),
-          style: const TextStyle(color: Colors.white),
+          session.currentQuestion!.question.convertFromHtmlText(),
+          style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
         ),
         const SizedBox(
           height: 20,
         ),
-        ...session.currentQuestion!.answers.map(
-          (answer) => Column(
-            children: [
-              GestureDetector(
-                onTap: selectedAnswer != null
-                    ? null
+        Expanded(
+          child: ListView.separated(
+            shrinkWrap: true,
+            itemBuilder: (context, index) {
+              return ElevatedButton(
+                onPressed: selectedAnswer != null
+                    ? () {}
                     : () async {
                         await QuizSessionRepository().answerQuestion(
                           isChallenger: widget.isChallenger,
                           matchId: widget.matchId,
-                          answer: answer,
+                          answer: session.currentQuestion!.answers[index],
                         );
                         setState(() {
-                          selectedAnswer = answer;
+                          selectedAnswer = session.currentQuestion!.answers[index];
                         });
                       },
-                child: Container(
-                  height: 40,
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    color: answer != selectedAnswer
-                        ? !showRoundResults
-                            ? Colors.red
-                            : _getOtherAnswer(session, widget.isChallenger) == answer
-                                ? Colors.indigo
-                                : Colors.red
-                        : !showRoundResults
-                            ? Colors.green
-                            : _getOtherAnswer(session, widget.isChallenger) == answer
-                                ? Colors.purple
-                                : Colors.green,
-                    border: showRoundResults && answer == session.currentQuestion!.correctAnswer
-                        ? Border.all(color: Colors.blue, width: 3)
-                        : null,
-                  ),
-                  child: Center(
-                    child: Text(
-                      _convertHtmlText(answer),
-                      style: const TextStyle(color: Colors.white),
-                    ),
-                  ),
+                style: ElevatedButton.styleFrom(
+                  shape: showRoundResults &&
+                          session.currentQuestion!.answers[index] == session.currentQuestion!.correctAnswer
+                      ? RoundedRectangleBorder(
+                          side: const BorderSide(
+                            width: 2,
+                            color: Colors.green,
+                          ),
+                          borderRadius: BorderRadius.circular(16),
+                        )
+                      : null,
+                  backgroundColor: session.currentQuestion!.answers[index] != selectedAnswer
+                      ? !showRoundResults
+                          ? AppColors.surface
+                          : _getOtherAnswer(session, widget.isChallenger) == session.currentQuestion!.answers[index]
+                              ? Colors.indigo
+                              : AppColors.surface
+                      : !showRoundResults
+                          ? Colors.green
+                          : _getOtherAnswer(session, widget.isChallenger) == session.currentQuestion!.answers[index]
+                              ? Colors.purple
+                              : Colors.green,
                 ),
-              ),
-              const SizedBox(
-                height: 5,
-              ),
-            ],
+                child: Text(session.currentQuestion!.answers[index].convertFromHtmlText()),
+              );
+            },
+            separatorBuilder: (context, index) {
+              return const SizedBox(height: AppMargins.regularMargin);
+            },
+            itemCount: session.currentQuestion!.answers.length,
           ),
         ),
+        // ...session.currentQuestion!.answers.map(
+        //   (answer) => Column(
+        //     children: [
+        //       GestureDetector(
+        //         onTap: selectedAnswer != null
+        //             ? null
+        //             : () async {
+        //                 await QuizSessionRepository().answerQuestion(
+        //                   isChallenger: widget.isChallenger,
+        //                   matchId: widget.matchId,
+        //                   answer: answer,
+        //                 );
+        //                 setState(() {
+        //                   selectedAnswer = answer;
+        //                 });
+        //               },
+        //         child: Container(
+        //           height: 40,
+        //           width: double.infinity,
+        //           decoration: BoxDecoration(
+        //             color: answer != selectedAnswer
+        //                 ? !showRoundResults
+        //                     ? Colors.red
+        //                     : _getOtherAnswer(session, widget.isChallenger) == answer
+        //                         ? Colors.indigo
+        //                         : Colors.red
+        //                 : !showRoundResults
+        //                     ? Colors.green
+        //                     : _getOtherAnswer(session, widget.isChallenger) == answer
+        //                         ? Colors.purple
+        //                         : Colors.green,
+        //             border: showRoundResults && answer == session.currentQuestion!.correctAnswer
+        //                 ? Border.all(color: Colors.blue, width: 3)
+        //                 : null,
+        //           ),
+        //           child: Center(
+        //             child: Text(
+        //               _convertHtmlText(answer),
+        //               style: const TextStyle(color: Colors.white),
+        //             ),
+        //           ),
+        //         ),
+        //       ),
+        //       const SizedBox(
+        //         height: 5,
+        //       ),
+        //     ],
+        //   ),
+        // ),
       ],
     );
   }

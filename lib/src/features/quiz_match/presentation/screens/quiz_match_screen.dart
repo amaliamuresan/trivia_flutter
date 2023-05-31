@@ -156,144 +156,148 @@ class _QuizMatchScreenState extends State<QuizMatchScreen> {
 
     final progressBarWidth = MediaQuery.of(context).size.width / 1.1;
 
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        const SizedBox(height: AppMargins.regularMargin),
-        const SizedBox(
-          height: 50,
-        ),
-        Stack(
-          children: [
-            Container(
-              height: 8,
-              width: progressBarWidth,
-              decoration: BoxDecoration(
-                color: AppColors.surface,
-                borderRadius: BorderRadius.circular(25),
-              ),
-            ),
-            Container(
-              height: 8,
-              width: remainingTimeSeconds * progressBarWidth / questionTimeSeconds,
-              decoration: BoxDecoration(
-                color: AppColors.accentColor,
-                borderRadius: BorderRadius.circular(25),
-              ),
-            ),
-          ],
-        ),
-        Text(
-          session.category,
-          style: const TextStyle(color: Colors.white),
-        ),
-        const SizedBox(height: AppMargins.bigMargin),
-        Text(
-          session.currentQuestion!.question.convertFromHtmlText(),
-          style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
-        ),
-        const SizedBox(
-          height: 20,
-        ),
-        Expanded(
-          child: ListView.separated(
-            shrinkWrap: true,
-            itemBuilder: (context, index) {
-              return ElevatedButton(
-                onPressed: selectedAnswer != null
-                    ? () {}
-                    : () async {
-                        await QuizSessionRepository().answerQuestion(
-                          isChallenger: widget.isChallenger,
-                          matchId: widget.matchId,
-                          answer: session.currentQuestion!.answers[index],
-                        );
-                        setState(() {
-                          selectedAnswer = session.currentQuestion!.answers[index];
-                        });
-                      },
-                style: ElevatedButton.styleFrom(
-                  shape: showRoundResults &&
-                          session.currentQuestion!.answers[index] == session.currentQuestion!.correctAnswer
-                      ? RoundedRectangleBorder(
-                          side: const BorderSide(
-                            width: 2,
-                            color: Colors.green,
-                          ),
-                          borderRadius: BorderRadius.circular(16),
-                        )
-                      : null,
-                  backgroundColor: session.currentQuestion!.answers[index] != selectedAnswer
-                      ? !showRoundResults
-                          ? AppColors.surface
-                          : _getOtherAnswer(session, widget.isChallenger) == session.currentQuestion!.answers[index]
-                              ? Colors.indigo
-                              : AppColors.surface
-                      : !showRoundResults
-                          ? Colors.green
-                          : _getOtherAnswer(session, widget.isChallenger) == session.currentQuestion!.answers[index]
-                              ? Colors.purple
-                              : Colors.green,
-                ),
-                child: Text(session.currentQuestion!.answers[index].convertFromHtmlText()),
-              );
-            },
-            separatorBuilder: (context, index) {
-              return const SizedBox(height: AppMargins.regularMargin);
-            },
-            itemCount: session.currentQuestion!.answers.length,
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const SizedBox(height: AppMargins.regularMargin),
+
+
+          Text(
+            session.category,
+            style: const TextStyle(color: Colors.white),
           ),
-        ),
-        // ...session.currentQuestion!.answers.map(
-        //   (answer) => Column(
-        //     children: [
-        //       GestureDetector(
-        //         onTap: selectedAnswer != null
-        //             ? null
-        //             : () async {
-        //                 await QuizSessionRepository().answerQuestion(
-        //                   isChallenger: widget.isChallenger,
-        //                   matchId: widget.matchId,
-        //                   answer: answer,
-        //                 );
-        //                 setState(() {
-        //                   selectedAnswer = answer;
-        //                 });
-        //               },
-        //         child: Container(
-        //           height: 40,
-        //           width: double.infinity,
-        //           decoration: BoxDecoration(
-        //             color: answer != selectedAnswer
-        //                 ? !showRoundResults
-        //                     ? Colors.red
-        //                     : _getOtherAnswer(session, widget.isChallenger) == answer
-        //                         ? Colors.indigo
-        //                         : Colors.red
-        //                 : !showRoundResults
-        //                     ? Colors.green
-        //                     : _getOtherAnswer(session, widget.isChallenger) == answer
-        //                         ? Colors.purple
-        //                         : Colors.green,
-        //             border: showRoundResults && answer == session.currentQuestion!.correctAnswer
-        //                 ? Border.all(color: Colors.blue, width: 3)
-        //                 : null,
-        //           ),
-        //           child: Center(
-        //             child: Text(
-        //               _convertHtmlText(answer),
-        //               style: const TextStyle(color: Colors.white),
-        //             ),
-        //           ),
-        //         ),
-        //       ),
-        //       const SizedBox(
-        //         height: 5,
-        //       ),
-        //     ],
-        //   ),
-        // ),
-      ],
+          SizedBox(height: 16,),
+          Stack(
+            children: [
+              Container(
+                height: 8,
+                width: progressBarWidth,
+                decoration: BoxDecoration(
+                  color: AppColors.surface,
+                  borderRadius: BorderRadius.circular(25),
+                ),
+              ),
+              Container(
+                height: 8,
+                width: remainingTimeSeconds * progressBarWidth / questionTimeSeconds,
+                decoration: BoxDecoration(
+                  color: AppColors.accentColor,
+                  borderRadius: BorderRadius.circular(25),
+                ),
+              ),
+            ],
+          ),
+
+          const SizedBox(height: AppMargins.bigMargin),
+          Text(
+            session.currentQuestion!.question.convertFromHtmlText(),
+            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+          Expanded(
+            child: ListView.separated(
+              shrinkWrap: true,
+              itemBuilder: (context, index) {
+                return ElevatedButton(
+                  onPressed: selectedAnswer != null
+                      ? () {}
+                      : () async {
+                          await QuizSessionRepository().answerQuestion(
+                            isChallenger: widget.isChallenger,
+                            matchId: widget.matchId,
+                            answer: session.currentQuestion!.answers[index],
+                          );
+                          setState(() {
+                            selectedAnswer = session.currentQuestion!.answers[index];
+                          });
+                        },
+                  style: ElevatedButton.styleFrom(
+                    shape: showRoundResults &&
+                            session.currentQuestion!.answers[index] == session.currentQuestion!.correctAnswer
+                        ? RoundedRectangleBorder(
+                            side: const BorderSide(
+                              width: 2,
+                              color: Colors.green,
+                            ),
+                            borderRadius: BorderRadius.circular(16),
+                          )
+                        : null,
+                    backgroundColor: session.currentQuestion!.answers[index] != selectedAnswer
+                        ? !showRoundResults
+                            ? AppColors.surface
+                            : _getOtherAnswer(session, widget.isChallenger) == session.currentQuestion!.answers[index]
+                                ? Colors.indigo
+                                : AppColors.surface
+                        : !showRoundResults
+                            ? Colors.green
+                            : _getOtherAnswer(session, widget.isChallenger) == session.currentQuestion!.answers[index]
+                                ? Colors.purple
+                                : Colors.green,
+                  ),
+                  child: Text(session.currentQuestion!.answers[index].convertFromHtmlText()),
+                );
+              },
+              separatorBuilder: (context, index) {
+                return const SizedBox(height: AppMargins.regularMargin);
+              },
+              itemCount: session.currentQuestion!.answers.length,
+            ),
+          ),
+          // ...session.currentQuestion!.answers.map(
+          //   (answer) => Column(
+          //     children: [
+          //       GestureDetector(
+          //         onTap: selectedAnswer != null
+          //             ? null
+          //             : () async {
+          //                 await QuizSessionRepository().answerQuestion(
+          //                   isChallenger: widget.isChallenger,
+          //                   matchId: widget.matchId,
+          //                   answer: answer,
+          //                 );
+          //                 setState(() {
+          //                   selectedAnswer = answer;
+          //                 });
+          //               },
+          //         child: Container(
+          //           height: 40,
+          //           width: double.infinity,
+          //           decoration: BoxDecoration(
+          //             color: answer != selectedAnswer
+          //                 ? !showRoundResults
+          //                     ? Colors.red
+          //                     : _getOtherAnswer(session, widget.isChallenger) == answer
+          //                         ? Colors.indigo
+          //                         : Colors.red
+          //                 : !showRoundResults
+          //                     ? Colors.green
+          //                     : _getOtherAnswer(session, widget.isChallenger) == answer
+          //                         ? Colors.purple
+          //                         : Colors.green,
+          //             border: showRoundResults && answer == session.currentQuestion!.correctAnswer
+          //                 ? Border.all(color: Colors.blue, width: 3)
+          //                 : null,
+          //           ),
+          //           child: Center(
+          //             child: Text(
+          //               _convertHtmlText(answer),
+          //               style: const TextStyle(color: Colors.white),
+          //             ),
+          //           ),
+          //         ),
+          //       ),
+          //       const SizedBox(
+          //         height: 5,
+          //       ),
+          //     ],
+          //   ),
+          // ),
+        ],
+      ),
     );
   }
 }

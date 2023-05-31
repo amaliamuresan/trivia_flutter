@@ -7,6 +7,7 @@ import 'package:trivia_app/src/features/profile/data/firestore_user_public_repos
 import 'package:trivia_app/src/features/profile/domain/firestore_user_public_data.dart';
 import 'package:trivia_app/src/features/quiz_match/data/quiz_session_repository.dart';
 import 'package:trivia_app/src/features/quiz_menu/domain/quiz_category.dart';
+import 'package:trivia_app/src/features/search/presentation/widgets/user_item_widget.dart';
 import 'package:trivia_app/src/routes/routes.dart';
 
 class QuizPageScreen extends StatefulWidget {
@@ -47,24 +48,24 @@ class _QuizPageScreenState extends State<QuizPageScreen> {
       );
     }
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: EdgeInsets.only(top: 80),
+      appBar: AppBar(title: Text(widget.category.name),),
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: SingleChildScrollView(
           child: SizedBox(
             width: double.infinity,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text('This is category: ${widget.category.name}'),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
-                Text('Select a friend to challenge'),
-                SizedBox(
-                  height: 10,
+                const Text('Select a friend to challenge'),
+                const SizedBox(
+                  height: 16,
                 ),
                 ...userFriends.map(
-                  (user) => GestureDetector(
+                  (user) => UserItemWidget(
                     onTap: () async {
                       final matchId = await QuizSessionRepository().createMatch(
                         category: widget.category,
@@ -77,13 +78,8 @@ class _QuizPageScreenState extends State<QuizPageScreen> {
                         'isChallenger': 'true',
                       });
                     },
-                    child: Container(
-                      height: 40,
-                      color: Colors.blueAccent,
-                      child: Center(
-                        child: Text(user.displayName ?? 'This user has an error with its name'),
-                      ),
-                    ),
+                    displayName: user.displayName ?? '',
+                    photoUrl: user.photoUrl,
                   ),
                 ),
                 // Row(

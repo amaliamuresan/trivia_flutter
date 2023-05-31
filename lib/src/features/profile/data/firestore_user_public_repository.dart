@@ -106,11 +106,11 @@ class FirestoreUserPublicRepository {
 
   Future<void> updateUserMatchResults(String uid, bool didWon) async {
     final user = await getUserPublicDataById(uid);
-    final nrOfMatchesPlayed = user.nrOfMatchesPlayed ?? 0 + 1;
+    final nrOfMatchesPlayed = (user.nrOfMatchesPlayed ?? 0) + 1;
     await _collectionReference.doc(uid).update({'nrOfMatchesPlayed': nrOfMatchesPlayed});
 
     if (didWon) {
-      final nrOfMatchesWon = user.nrOfMatchesWon ?? 0 + 1;
+      final nrOfMatchesWon = (user.nrOfMatchesWon ?? 0) + 1;
       await _collectionReference.doc(uid).update({'nrOfMatchesWon': nrOfMatchesWon});
     }
   }

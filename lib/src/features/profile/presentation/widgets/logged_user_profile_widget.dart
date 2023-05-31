@@ -60,7 +60,7 @@ class LoggedUserProfileWidgetState extends State<LoggedUserProfileWidget> {
               divider,
               UserStatisticsWidget(
                 upperText:
-                    '${(widget.userData.nrOfMatchesWon ?? 0) ~/ (widget.userData.nrOfMatchesPlayed ?? 1)}%',
+                    '${((widget.userData.nrOfMatchesWon ?? 0) / (widget.userData.nrOfMatchesPlayed ?? 1) * 100).toInt()}%',
                 lowerText: 'win rate',
               ),
               divider,
@@ -87,8 +87,7 @@ class LoggedUserProfileWidgetState extends State<LoggedUserProfileWidget> {
     await referenceImageToUpload.putFile(File(image.path));
 
     await referenceImageToUpload.getDownloadURL().then((value) async {
-      await FirestoreUserPublicRepository()
-          .updateProfilePictureUrl(widget.userData.id, value);
+      await FirestoreUserPublicRepository().updateProfilePictureUrl(widget.userData.id, value);
       setState(() => photoUrl = value);
     });
   }

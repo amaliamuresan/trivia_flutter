@@ -9,6 +9,7 @@ import 'package:lottie/lottie.dart';
 import 'package:trivia_app/src/extensions/string_extensions.dart';
 import 'package:trivia_app/src/features/authentication/domain/models/auth_user_data.dart';
 import 'package:trivia_app/src/features/authentication/presentation/blocs/auth_bloc/auth_bloc.dart';
+import 'package:trivia_app/src/features/profile/data/firestore_user_public_repository.dart';
 import 'package:trivia_app/src/features/quiz_match/data/quiz_session_repository.dart';
 import 'package:trivia_app/src/features/quiz_match/domain/quiz_session.dart';
 import 'package:trivia_app/src/features/quiz_match/presentation/widgets/match_result_screen.dart';
@@ -66,6 +67,15 @@ class _QuizMatchScreenState extends State<QuizMatchScreen> {
               newSession.otherPlayerAnswer == null &&
               newSession.challengerAnswer == null) {
             startTimer();
+          }
+
+          if (newSession.matchDone == true) {
+            final currentPlayerScore = _getPlayerScore(newSession, widget.isChallenger);
+            final otherPlayerScore = _getOpponentScore(newSession, widget.isChallenger);
+            final didWin = currentPlayerScore >= otherPlayerScore;
+            print('${currentUser.displayName} won : ${didWin}');
+            // final didLose = currentPlayerScore < otherPlayerScore;
+            await FirestoreUserPublicRepository().updateUserMatchResults(currentUser.id, didWin);
           }
           try {
             if (newSession.currentQuestionIndex != session.currentQuestionIndex) {
@@ -132,13 +142,19 @@ class _QuizMatchScreenState extends State<QuizMatchScreen> {
         children: [
           Row(),
           Lottie.asset('assets/animations/waiting.json'),
-          const SizedBox(height: 16,),
+          const SizedBox(
+            height: 16,
+          ),
           const Text(
             'Waiting for the other player...',
             style: TextStyle(color: Colors.white),
           ),
-          const SizedBox(height: 16,),
-          const CircularProgressIndicator(color: AppColors.primary,),
+          const SizedBox(
+            height: 16,
+          ),
+          const CircularProgressIndicator(
+            color: AppColors.primary,
+          ),
         ],
       );
     }
@@ -163,12 +179,13 @@ class _QuizMatchScreenState extends State<QuizMatchScreen> {
         children: [
           const SizedBox(height: AppMargins.regularMargin),
 
-
           Text(
             session.category,
             style: const TextStyle(color: Colors.white),
           ),
-          SizedBox(height: 16,),
+          SizedBox(
+            height: 16,
+          ),
           Stack(
             children: [
               Container(

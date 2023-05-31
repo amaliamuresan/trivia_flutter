@@ -48,77 +48,74 @@ class _QuizPageScreenState extends State<QuizPageScreen> {
       );
     }
     return Scaffold(
+      appBar: AppBar(title: Text(widget.category.name),),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: SingleChildScrollView(
-          child: Padding(
-            padding: EdgeInsets.only(top: 80),
-            child: SizedBox(
-              width: double.infinity,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text('This is category: ${widget.category.name}'),
-                  const SizedBox(
-                    height: 10,
+          child: SizedBox(
+            width: double.infinity,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const SizedBox(
+                  height: 10,
+                ),
+                const Text('Select a friend to challenge'),
+                const SizedBox(
+                  height: 16,
+                ),
+                ...userFriends.map(
+                  (user) => UserItemWidget(
+                    onTap: () async {
+                      final matchId = await QuizSessionRepository().createMatch(
+                        category: widget.category,
+                        challengerId: currentUser.id,
+                        opponentId: user.id,
+                      );
+                      // ignore: use_build_context_synchronously
+                      await context.pushNamed(RouteNames.quizMatch, queryParams: {
+                        'matchId': matchId,
+                        'isChallenger': 'true',
+                      });
+                    },
+                    displayName: user.displayName ?? '',
+                    photoUrl: user.photoUrl,
                   ),
-                  const Text('Select a friend to challenge'),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  ...userFriends.map(
-                    (user) => UserItemWidget(
-                      onTap: () async {
-                        final matchId = await QuizSessionRepository().createMatch(
-                          category: widget.category,
-                          challengerId: currentUser.id,
-                          opponentId: user.id,
-                        );
-                        // ignore: use_build_context_synchronously
-                        await context.pushNamed(RouteNames.quizMatch, queryParams: {
-                          'matchId': matchId,
-                          'isChallenger': 'true',
-                        });
-                      },
-                      displayName: user.displayName ?? '',
-                      photoUrl: user.photoUrl,
-                    ),
-                  ),
-                  // Row(
-                  //   mainAxisAlignment: MainAxisAlignment.center,
-                  //   children: [
-                  //     ElevatedButton(
-                  //       onPressed: () async {
-                  //         final currentUser = BlocProvider.of<AuthBloc>(context).state.authUserData;
-                  //         // final questions = await OpenTriviaRepository().getQuestions(categoryId: widget.category.id);
-                  //         final quizMatch = QuizSession(
-                  //           challengerId: currentUser.id,
-                  //           otherPlayerId: debugUser.id,
-                  //           matchDone: false,
-                  //           // questions: questions,
-                  //           currentQuestionIndex: 0,
-                  //           challengerCorrectAnswers: 0,
-                  //           otherPlayerCorrectAnswers: 0,
-                  //           challengerAnswer: null,
-                  //           otherPlayerAnswer: null,
-                  //           challengerConnected: false,
-                  //           otherPlayerConnected: false,
-                  //           category: widget.category.name,
-                  //           categoryId: widget.category.id,
-                  //         );
-                  //         final matchId = await QuizSessionRepository().createMatch(sessionDetails: quizMatch);
-                  //         print(matchId);
-                  //         context.pushNamed(RouteNames.quizMatch, queryParams: {
-                  //           'matchId': matchId,
-                  //           'isChallenger': 'true',
-                  //         });
-                  //       },
-                  //       child: Text('Challenge debug user with name: ${debugUser.displayName}!'),
-                  //     ),
-                  //   ],
-                  // ),
-                ],
-              ),
+                ),
+                // Row(
+                //   mainAxisAlignment: MainAxisAlignment.center,
+                //   children: [
+                //     ElevatedButton(
+                //       onPressed: () async {
+                //         final currentUser = BlocProvider.of<AuthBloc>(context).state.authUserData;
+                //         // final questions = await OpenTriviaRepository().getQuestions(categoryId: widget.category.id);
+                //         final quizMatch = QuizSession(
+                //           challengerId: currentUser.id,
+                //           otherPlayerId: debugUser.id,
+                //           matchDone: false,
+                //           // questions: questions,
+                //           currentQuestionIndex: 0,
+                //           challengerCorrectAnswers: 0,
+                //           otherPlayerCorrectAnswers: 0,
+                //           challengerAnswer: null,
+                //           otherPlayerAnswer: null,
+                //           challengerConnected: false,
+                //           otherPlayerConnected: false,
+                //           category: widget.category.name,
+                //           categoryId: widget.category.id,
+                //         );
+                //         final matchId = await QuizSessionRepository().createMatch(sessionDetails: quizMatch);
+                //         print(matchId);
+                //         context.pushNamed(RouteNames.quizMatch, queryParams: {
+                //           'matchId': matchId,
+                //           'isChallenger': 'true',
+                //         });
+                //       },
+                //       child: Text('Challenge debug user with name: ${debugUser.displayName}!'),
+                //     ),
+                //   ],
+                // ),
+              ],
             ),
           ),
         ),

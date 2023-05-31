@@ -42,7 +42,7 @@ class OtherUserProfile extends StatelessWidget {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const AvatarWidget(),
+                AvatarWidget(photoUrl: userPublicData.photoUrl,),
                 const SizedBox(height: AppMargins.regularMargin),
                 Text(
                   userPublicData.displayName ?? '',

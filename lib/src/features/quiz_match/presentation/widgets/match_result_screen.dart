@@ -4,6 +4,7 @@ import 'package:lottie/lottie.dart';
 import 'package:trivia_app/src/features/authentication/presentation/blocs/auth_bloc/auth_bloc.dart';
 import 'package:trivia_app/src/features/profile/presentation/widgets/avatar_widget.dart';
 import 'package:trivia_app/src/features/quiz_match/presentation/widgets/match_result_message.dart';
+import 'package:trivia_app/src/widgets/buttons/custom_button.dart';
 
 class MatchResultScreen extends StatelessWidget {
   const MatchResultScreen({
@@ -37,14 +38,15 @@ class MatchResultScreen extends StatelessWidget {
           AvatarWidget(
             photoUrl: context.read<AuthBloc>().state.publicUserData.photoUrl,
           ),
+          SizedBox(height: 16,),
           MatchResultMessage(
             isWinner: isWinner,
             isDraw: isDraw,
           ),
           const SizedBox(height: 8),
           Text('$playerCorrectQuestions  -  $opponentCorrectQuestions'),
-          const SizedBox(height: 8),
-          ElevatedButton(onPressed: onExitTap, child: const Text('Exit')),
+          const SizedBox(height: 16),
+          CustomButton.outlined(onPressed: onExitTap, text: 'Exit', width: 150,),
         ],
       ),
     );

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:html/parser.dart';
+import 'package:lottie/lottie.dart';
 import 'package:trivia_app/src/extensions/string_extensions.dart';
 import 'package:trivia_app/src/features/authentication/domain/models/auth_user_data.dart';
 import 'package:trivia_app/src/features/authentication/presentation/blocs/auth_bloc/auth_bloc.dart';
@@ -130,11 +131,14 @@ class _QuizMatchScreenState extends State<QuizMatchScreen> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Row(),
+          Lottie.asset('assets/animations/waiting.json'),
+          const SizedBox(height: 16,),
           const Text(
-            'Waiting for other player...',
+            'Waiting for the other player...',
             style: TextStyle(color: Colors.white),
           ),
-          const CircularProgressIndicator(),
+          const SizedBox(height: 16,),
+          const CircularProgressIndicator(color: AppColors.primary,),
         ],
       );
     }

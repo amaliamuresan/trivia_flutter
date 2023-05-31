@@ -40,33 +40,6 @@ class _TempNotificationChallengesState extends State<TempNotificationChallenges>
           matches.add(QuizSession.fromMap(data as Map<String, dynamic>));
           matchesIds.add(element.id);
         }
-        matches
-          ..add(QuizSession(
-              challengerId: 'challengerId',
-              otherPlayerId: 'otherPlayerId',
-              matchDone: false,
-              currentQuestionIndex: 0,
-              challengerCorrectAnswers: 0,
-              otherPlayerCorrectAnswers: 0,
-              challengerAnswer: 'challengerAnswer',
-              otherPlayerAnswer: 'otherPlayerAnswer',
-              challengerConnected: true,
-              otherPlayerConnected: true,
-              category: 'General Knowledge',
-              categoryId: 22))
-          ..add(QuizSession(
-              challengerId: 'challengerId',
-              otherPlayerId: 'otherPlayerId',
-              matchDone: false,
-              currentQuestionIndex: 0,
-              challengerCorrectAnswers: 0,
-              otherPlayerCorrectAnswers: 0,
-              challengerAnswer: 'challengerAnswer',
-              otherPlayerAnswer: 'otherPlayerAnswer',
-              challengerConnected: true,
-              otherPlayerConnected: true,
-              category: 'Entertainment: Music',
-              categoryId: 22));
       });
     });
   }

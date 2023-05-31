@@ -14,6 +14,7 @@ import 'package:trivia_app/src/features/quiz_menu/data/open_trivia_repository.da
 import 'package:trivia_app/src/features/quiz_menu/domain/quiz_category.dart';
 import 'package:trivia_app/src/features/search/presentation/pages/search_page.dart';
 import 'package:trivia_app/src/features/single_game/presentation/pages/single_game_page.dart';
+import 'package:trivia_app/src/widgets/buttons/custom_button.dart';
 
 part 'route_names.dart';
 
@@ -164,29 +165,17 @@ class AppRoutes {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    const Text('More'),
                     SizedBox(
                       height: 45,
-                      child: ElevatedButton(
-                        onPressed: () {
-                          BlocProvider.of<AuthBloc>(context).add(
-                            LogOut(() {
-                              context.go(r'\');
-                            }),
-                          );
-                        },
-                        child: const Text('Sign out'),
-                      ),
+                      child: CustomButton.outlined(width: 200, text: 'Log Out', onPressed:  () {
+                        BlocProvider.of<AuthBloc>(context).add(
+                          LogOut(() {
+                            context.go(r'\');
+                          }),
+                        );
+                      }),
                     ),
-                    SizedBox(
-                      height: 45,
-                      child: ElevatedButton(
-                        onPressed: () async {
-                          await OpenTriviaRepository().getQuestions();
-                        },
-                        child: const Text('Request'),
-                      ),
-                    ),
+
                   ],
                 ),
               ),

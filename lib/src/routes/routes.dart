@@ -10,7 +10,6 @@ import 'package:trivia_app/src/features/main/presentation/main_screen.dart';
 import 'package:trivia_app/src/features/notifications/presentation/pages/notifications_page.dart';
 import 'package:trivia_app/src/features/quiz_match/presentation/screens/quiz_match_screen.dart';
 import 'package:trivia_app/src/features/quiz_match/presentation/screens/quiz_page_screen.dart';
-import 'package:trivia_app/src/features/quiz_menu/data/open_trivia_repository.dart';
 import 'package:trivia_app/src/features/quiz_menu/domain/quiz_category.dart';
 import 'package:trivia_app/src/features/search/presentation/pages/search_page.dart';
 import 'package:trivia_app/src/features/single_game/presentation/pages/single_game_page.dart';
@@ -106,6 +105,7 @@ class AppRoutes {
         name: RouteNames.quizMatch,
         builder: (BuildContext context, GoRouterState state) {
           return Scaffold(
+            appBar: AppBar(toolbarHeight: 0),
               body: QuizMatchScreen(
             matchId: state.queryParams['matchId']!,
             isChallenger: state.queryParams['isChallenger']! == 'true',
